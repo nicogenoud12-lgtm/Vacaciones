@@ -124,5 +124,13 @@
  "campo_x_dias_corridos": 29248,
  "campo_x_retoma": 29250,
  "vista_nota_vacaciones": 4941,
- "reporte_nota_vacaciones": 1496
+ "reporte_nota_vacaciones": 1496,
+ "tipo_vacaciones": 74,
+ "licencias_prueba": [
+  1,
+  2,
+  3
+ ],
+ "paperformat_vacaciones": 25,
+ "incidente_borrado": "11/11/2026: se borró por error la ir.actions.server 1081 de stage (nombre empezaba con 'TEMP '). Ninguna regla de automatización quedó sin acción. Revisar en producción qué era la 1081."
 }

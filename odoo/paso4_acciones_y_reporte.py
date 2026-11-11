@@ -148,41 +148,44 @@ ARCH = """<t t-name="genoud.report_vacaciones_notificacion">
 <t t-set="dias_semana" t-value="['lunes','martes','miércoles','jueves','viernes','sábado','domingo']"/>
 <t t-set="meses" t-value="['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre']"/>
 <t t-foreach="docs" t-as="o">
-<div class="article" t-att-data-oe-model="o._name" t-att-data-oe-id="o.id" t-attf-style="font-family: Arial, Helvetica, sans-serif; font-size: 11pt; color: #000; {{ 'page-break-before: always;' if o_index else '' }}">
+<div class="article" t-att-data-oe-model="o._name" t-att-data-oe-id="o.id" t-attf-style="font-family: Arial, Helvetica, sans-serif; font-size: 10pt; color: #000; {{ 'page-break-before: always;' if o_index else '' }}">
 <t t-set="n" t-value="o.x_dias_corridos"/>
 <t t-set="n_letras" t-value="letras[n] if n &lt; 30 else (decenas[n // 10] + ((' Y ' + letras[n % 10]) if n % 10 else ''))"/>
 <t t-set="periodo" t-value="o.request_date_from.year if o.request_date_from.month &gt;= 10 else o.request_date_from.year - 1"/>
 <t t-foreach="[1, 2]" t-as="copia">
-<div t-attf-style="height: 132mm; overflow: hidden; {{ 'border-top: 1px dashed #888; padding-top: 8mm;' if copia == 2 else '' }}">
-  <div style="font-size: 9pt;" t-esc="o.employee_id.company_id.name"/>
-  <div style="text-align: center; font-weight: bold; font-size: 13pt; margin-top: 4mm;">PERÍODO DE DESCANSO ANUAL</div>
-  <div style="text-align: center; font-size: 10pt;">(Artículo 154 - Ley 20.744)</div>
-  <div style="text-align: right; margin-top: 6mm;">Pergamino, <t t-esc="int(time.strftime('%d'))"/> de <t t-esc="meses[int(time.strftime('%m')) - 1]"/> de <t t-esc="time.strftime('%Y')"/></div>
-  <div style="margin-top: 5mm;">Señor/a: <b t-esc="o.employee_id.name"/></div>
-  <p style="margin-top: 4mm; text-align: justify;">Notificámosle que en cumplimiento a lo dispuesto por el artículo 154 de la Ley 20.744 comenzará el período de descanso anual que le corresponde, según se detalla a continuación.</p>
-  <table style="margin-left: 6mm; border-collapse: collapse;">
-    <tr><td style="font-weight: bold; padding: 1mm 6mm 1mm 0;">CORRESPONDEN AL AÑO:</td><td t-esc="periodo"/></tr>
-    <tr><td style="font-weight: bold; padding: 1mm 6mm 1mm 0;">PERÍODO DE:</td><td><t t-esc="n"/> (<t t-esc="n_letras"/>) DÍAS</td></tr>
-    <tr><td style="font-weight: bold; padding: 1mm 6mm 1mm 0;">DESDE:</td><td><t t-esc="dias_semana[o.request_date_from.weekday()]"/> <t t-esc="o.request_date_from.strftime('%d/%m/%Y')"/> &#160;&#160; <b>HASTA:</b> <t t-esc="dias_semana[o.request_date_to.weekday()]"/> <t t-esc="o.request_date_to.strftime('%d/%m/%Y')"/> (inclusive)</td></tr>
-    <tr><td style="font-weight: bold; padding: 1mm 6mm 1mm 0;">RETOMA TAREAS EL:</td><td><t t-if="o.x_retoma"><t t-esc="dias_semana[o.x_retoma.weekday()]"/> <t t-esc="o.x_retoma.strftime('%d/%m/%Y')"/></t> (en su horario habitual)</td></tr>
-  </table>
-  <table style="width: 100%; margin-top: 14mm;"><tr><td style="width: 55%;"/><td style="border-top: 1px solid #000; text-align: center; font-size: 9pt; padding-top: 1mm;">Firma del empleador</td></tr></table>
-  <div style="margin-top: 6mm; font-size: 10pt;">En la fecha me notifico, recibiendo copia de la presente.</div>
-  <table style="width: 100%; margin-top: 14mm;"><tr>
-    <td style="width: 38%; border-top: 1px solid #000; text-align: center; font-size: 9pt; padding-top: 1mm;">Firma del empleado</td>
-    <td style="width: 24%;"/>
-    <td style="width: 38%; border-top: 1px solid #000; text-align: center; font-size: 9pt; padding-top: 1mm;">Aclaración de firma</td>
-  </tr></table>
+<div t-attf-style="height: 136mm; {{ 'border-top: 1px dashed #888; padding-top: 5mm;' if copia == 2 else '' }}">
+  <div style="font-size: 8pt;" t-esc="o.employee_id.company_id.name"/>
+  <div style="text-align: center; font-weight: bold; font-size: 12pt; margin-top: 2mm;">PERÍODO DE DESCANSO ANUAL</div>
+  <div style="text-align: center; font-size: 9pt;">(Artículo 154 - Ley 20.744)</div>
+  <div style="text-align: right; margin-top: 4mm;">Pergamino, <t t-esc="int(time.strftime('%d'))"/> de <t t-esc="meses[int(time.strftime('%m')) - 1]"/> de <t t-esc="time.strftime('%Y')"/></div>
+  <div style="margin-top: 3mm;">Señor/a: <b t-esc="o.employee_id.name"/></div>
+  <div style="margin-top: 3mm; text-align: justify;">Notificámosle que en cumplimiento a lo dispuesto por el artículo 154 de la Ley 20.744 comenzará el período de descanso anual que le corresponde, según se detalla a continuación.</div>
+  <div style="margin: 3mm 0 0 6mm; line-height: 1.7;">
+    <div><b style="display: inline-block; width: 52mm;">CORRESPONDEN AL AÑO:</b><t t-esc="periodo"/></div>
+    <div><b style="display: inline-block; width: 52mm;">PERÍODO DE:</b><t t-esc="n"/> (<t t-esc="n_letras"/>) DÍAS</div>
+    <div><b style="display: inline-block; width: 52mm;">DESDE:</b><t t-esc="dias_semana[o.request_date_from.weekday()]"/> <t t-esc="o.request_date_from.strftime('%d/%m/%Y')"/> &#160; <b>HASTA:</b> <t t-esc="dias_semana[o.request_date_to.weekday()]"/> <t t-esc="o.request_date_to.strftime('%d/%m/%Y')"/> (inclusive)</div>
+    <div><b style="display: inline-block; width: 52mm;">RETOMA TAREAS EL:</b><t t-if="o.x_retoma"><t t-esc="dias_semana[o.x_retoma.weekday()]"/> <t t-esc="o.x_retoma.strftime('%d/%m/%Y')"/></t> (en su horario habitual)</div>
+  </div>
+  <div style="margin: 13mm 0 0 105mm; width: 70mm; border-top: 1px solid #000; text-align: center; font-size: 8pt; padding-top: 1mm;">Firma del empleador</div>
+  <div style="margin-top: 4mm; font-size: 9pt;">En la fecha me notifico, recibiendo copia de la presente.</div>
+  <div style="margin-top: 13mm; height: 6mm; position: relative;">
+    <div style="position: absolute; left: 0; width: 70mm; border-top: 1px solid #000; text-align: center; font-size: 8pt; padding-top: 1mm;">Firma del empleado</div>
+    <div style="position: absolute; left: 105mm; width: 70mm; border-top: 1px solid #000; text-align: center; font-size: 8pt; padding-top: 1mm;">Aclaración de firma</div>
+  </div>
 </div>
 </t>
 </div>
 </t>
 </t>
 </t>"""
+ids["paperformat_vacaciones"] = upsert("report.paperformat", [["name", "=", "A4 Vacaciones (nota)"]], {
+    "name": "A4 Vacaciones (nota)", "format": "A4", "orientation": "Portrait", "margin_top": 8, "margin_bottom": 6,
+    "margin_left": 12, "margin_right": 12, "header_line": False, "header_spacing": 0, "dpi": 96, "disable_shrinking": True,
+})
 ids["vista_nota_vacaciones"] = upsert("ir.ui.view", [["key", "=", KEY]], {"name": KEY, "key": KEY, "type": "qweb", "arch": ARCH})
 ids["reporte_nota_vacaciones"] = upsert("ir.actions.report", [["report_name", "=", KEY]], {
     "name": "Notificación de vacaciones", "model": "hr.leave", "report_type": "qweb-pdf", "report_name": KEY, "report_file": KEY,
-    "binding_model_id": M_LEAVE, "binding_type": "report",
+    "binding_model_id": M_LEAVE, "binding_type": "report", "paperformat_id": ids["paperformat_vacaciones"],
     "print_report_name": "'Notificacion vacaciones - %s' % object.employee_id.name",
 })
 json.dump(ids, open(LOG, "w"), indent=1, ensure_ascii=False)
