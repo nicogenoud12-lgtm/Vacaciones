@@ -198,7 +198,7 @@ def main():
             "localidad": "Pergamino",
             "empresas": {
                 "GFI": "GENOUD FORESTO INDUSTRIAL S.A.",
-                "AZ": "AZ",
+                "AZ": "ARAZÁ S.A.C.I.F.E.",
             },
             "textoNota": (
                 "Notificámosle que en cumplimiento a lo dispuesto por el artículo 154 de la Ley 20.744 "
