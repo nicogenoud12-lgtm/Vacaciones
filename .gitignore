@@ -2,3 +2,4 @@ node_modules/
 *.xlsx
 seed.json
 odoo/*.local.json
+__pycache__/
