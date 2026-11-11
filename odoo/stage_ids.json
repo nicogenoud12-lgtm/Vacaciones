@@ -97,5 +97,12 @@
   4018,
   4019
  ],
- "empleados_nota": "El mapa empleado -> ID de Odoo está en stage_empleados.local.json (no se sube al repositorio). paso2_empleados.py lo reconstruye."
+ "empleados_nota": "El mapa empleado -> ID de Odoo está en stage_empleados.local.json (no se sube al repositorio). paso2_empleados.py lo reconstruye.",
+ "campo_x_vac_asignado": 29252,
+ "campo_x_vac_tomado": 29254,
+ "campo_x_vac_saldo": 29256,
+ "campo_x_vac_saldo_corridos": 29258,
+ "vista_saldo_vacaciones": 4942,
+ "accion_saldo_vacaciones": 1502,
+ "menu_saldo_vacaciones": 753
 }
