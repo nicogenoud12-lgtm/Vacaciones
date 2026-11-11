@@ -15,6 +15,7 @@ Los IDs de lo creado quedan en `stage_ids.json`. El mapa empleado → ID queda e
 | 5 | Acción sobre los 71 + `paso5_saldo_inicial.py seed.json` (pendientes suman, anticipos restan) | Ausencias / Administrador | Hecho: 61 asignaciones, 21 saldos; 61/61 saldos iguales a la app |
 
 | 6 | `paso6_saldo_real.py` — menú **Vacaciones → Reportes → Saldo de vacaciones**: saldo real por empleado en hábiles y corridos, con anticipos en rojo | Administrador | Hecho |
+| 7 | `paso7_resumen_empleado.py` — al tocar una fila de *Saldo de vacaciones* se abre el **Resumen de vacaciones**: saldo de hoy, días que le corresponden con su detalle, y cada pedido con su período y lo que le quedó después | Administrador | Hecho |
 
 `deshacer_stage.py` borra todo lo anterior (no correr sin confirmarlo).
 
@@ -24,7 +25,7 @@ Los IDs de lo creado quedan en `stage_ids.json`. El mapa empleado → ID queda e
 - **Cada octubre**: Empleados → seleccionar todos → Acciones → *Generar vacaciones del período*. Crea "Vacaciones AAAA" a cada uno según su antigüedad (no duplica si ya existe).
 - **Pedido de días**: Ausencias → Nueva → tipo Vacaciones. Odoo cuenta los hábiles y saltea feriados. "Para aprobar" = planificado; "Aprobado" = confirmado.
 - **Nota**: desde la ausencia, Imprimir → *Notificación de vacaciones*.
-- **Saldos**: Vacaciones → Reportes → *Saldo de vacaciones*. **No usar Reportes → Balance para ver anticipos**: calcula el restante por asignación y nunca baja de 0 (con 4 asignados y 5 tomados muestra Restante 0, Tomado 5).
+- **Saldos**: Vacaciones → Reportes → *Saldo de vacaciones*; tocando una persona se abre su resumen. **No usar Reportes → Balance para ver anticipos**: calcula el restante por asignación y nunca baja de 0 (con 4 asignados y 5 tomados muestra Restante 0, Tomado 5).
 
 ## Pruebas hechas en stage (11/11/2026)
 

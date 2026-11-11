@@ -58,7 +58,7 @@ for emp in records:
         continue
     # Odoo renombra la asignacion ("Vacaciones (14.0 day(s))") si se editan los dias: se busca tambien por fecha de inicio
     if env['hr.leave.allocation'].search_count([('employee_id', '=', emp.id), ('holiday_status_id', '=', tipo.id), '|', ('name', '=', nombre), '&', ('date_from', '=', ini), ('name', '=like', 'Vacaciones%')]):
-        avisos.append(emp.name + ': ya tenia ' + nombre)
+        avisos.append(emp.name + ': ya tenía ' + nombre)
         continue
     dias = 0
     detalle = ''
@@ -71,7 +71,7 @@ for emp in records:
             d = d + datetime.timedelta(days=1)
         if trab * 2 < habiles_anio:
             dias = int(trab / 20.0 + 0.5)
-            detalle = 'Proporcional (art. 153): ' + str(trab) + ' habiles trabajados / 20 = ' + str(dias) + ' dias.'
+            detalle = 'Proporcional (art. 153): ' + str(trab) + ' días hábiles trabajados / 20 = ' + str(dias) + ' días.'
     if not detalle:
         rd = dateutil.relativedelta.relativedelta
         if fin > ing + rd(years=20):
@@ -83,7 +83,7 @@ for emp in records:
         else:
             corr = 14
         dias = corr * 5 // 7
-        detalle = 'Antiguedad al 31/12/' + str(anio) + ': ' + str(anio - ing.year) + ' anios -> ' + str(corr) + ' dias corridos = ' + str(dias) + ' habiles.'
+        detalle = 'Antigüedad al 31/12/' + str(anio) + ': ' + str(anio - ing.year) + ' años → ' + str(corr) + ' días corridos = ' + str(dias) + ' hábiles.'
     if dias <= 0:
         continue
     env['hr.leave.allocation'].create({

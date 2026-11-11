@@ -104,5 +104,11 @@
  "campo_x_vac_saldo_corridos": 29258,
  "vista_saldo_vacaciones": 4942,
  "accion_saldo_vacaciones": 1502,
- "menu_saldo_vacaciones": 753
+ "menu_saldo_vacaciones": 753,
+ "campo_x_vac_asignaciones_ids": 29260,
+ "campo_x_vac_ausencias_ids": 29262,
+ "campo_x_periodo": 29264,
+ "campo_x_saldo_despues": 29266,
+ "campo_x_saldo_despues_corr": 29268,
+ "vista_resumen_vacaciones": 4944
 }

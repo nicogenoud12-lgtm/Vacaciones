@@ -15,7 +15,9 @@ if emp:
         if ap: call(m, "action_refuse", ids=ap, context=CTX)
         if r: call(m, "unlink", ids=r, context=CTX)
     call("hr.employee", "unlink", ids=emp, context=CTX)
-for k, m in [("menu_saldo_vacaciones", "ir.ui.menu"), ("accion_saldo_vacaciones", "ir.actions.act_window"), ("vista_saldo_vacaciones", "ir.ui.view"),
+for k, m in [("vista_resumen_vacaciones", "ir.ui.view"), ("campo_x_saldo_despues_corr", "ir.model.fields"), ("campo_x_saldo_despues", "ir.model.fields"),
+             ("campo_x_periodo", "ir.model.fields"), ("campo_x_vac_ausencias_ids", "ir.model.fields"), ("campo_x_vac_asignaciones_ids", "ir.model.fields"),
+             ("menu_saldo_vacaciones", "ir.ui.menu"), ("accion_saldo_vacaciones", "ir.actions.act_window"), ("vista_saldo_vacaciones", "ir.ui.view"),
              ("campo_x_vac_saldo_corridos", "ir.model.fields"), ("campo_x_vac_saldo", "ir.model.fields"), ("campo_x_vac_tomado", "ir.model.fields"), ("campo_x_vac_asignado", "ir.model.fields"),
              ("reporte_nota_vacaciones", "ir.actions.report"), ("vista_nota_vacaciones", "ir.ui.view"), ("accion_generar_vacaciones", "ir.actions.server"),
              ("vista_ficha_empleado", "ir.ui.view"), ("campo_x_retoma", "ir.model.fields"), ("campo_x_dias_corridos", "ir.model.fields"),
