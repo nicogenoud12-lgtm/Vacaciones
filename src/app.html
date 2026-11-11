@@ -1,0 +1,1052 @@
+<title>Vacaciones GFI</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=Public+Sans:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: barra superior fija con pestañas; tabla de empleados a lo ancho; ficha como panel lateral (pantalla completa en celular). */
+:root {
+  --bg: #f2f4f1;
+  --surface: #ffffff;
+  --surface-2: #e8ece7;
+  --fg: #18211d;
+  --muted: #5a6862;
+  --line: #d3dbd5;
+  --accent: #2c6a4d;
+  --accent-fg: #ffffff;
+  --accent-soft: #d9eadf;
+  --plan: #a86a12;
+  --plan-soft: #f5e4c3;
+  --neg: #b03a29;
+  --neg-soft: #f6dbd5;
+  --ok: #2c7a4c;
+  --ok-soft: #d6eedd;
+  --shadow: 0 10px 30px rgba(20, 35, 28, .18);
+  --f-display: "Barlow Semi Condensed", "Arial Narrow", "Roboto Condensed", sans-serif;
+  --f-body: "Public Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --r: 8px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111613; --surface: #192019; --surface-2: #222a25; --fg: #e3eae5; --muted: #98a69f; --line: #2d3832;
+    --accent: #72c198; --accent-fg: #0c1410; --accent-soft: #1d3a2b; --plan: #e3a94f; --plan-soft: #3b2f17;
+    --neg: #f08b77; --neg-soft: #3f211b; --ok: #7ccf9c; --ok-soft: #1b3626; --shadow: 0 10px 30px rgba(0, 0, 0, .5);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #111613; --surface: #192019; --surface-2: #222a25; --fg: #e3eae5; --muted: #98a69f; --line: #2d3832;
+  --accent: #72c198; --accent-fg: #0c1410; --accent-soft: #1d3a2b; --plan: #e3a94f; --plan-soft: #3b2f17;
+  --neg: #f08b77; --neg-soft: #3f211b; --ok: #7ccf9c; --ok-soft: #1b3626; --shadow: 0 10px 30px rgba(0, 0, 0, .5);
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font-family: var(--f-body); font-size: 14px; line-height: 1.45; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--surface); }
+h1, h2, h3 { font-family: var(--f-display); text-wrap: balance; margin: 0; letter-spacing: .01em; }
+button, input, select, textarea { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.num { font-variant-numeric: tabular-nums; }
+.muted { color: var(--muted); }
+.wrap { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+
+/* Barra superior */
+header.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--surface); border-bottom: 1px solid var(--line); }
+.top-in { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 20px; padding-block: 10px; }
+.brand { display: flex; align-items: baseline; gap: 8px; }
+.brand h1 { font-size: 22px; font-weight: 700; }
+.brand .tag { font-family: var(--f-display); font-weight: 600; font-size: 13px; letter-spacing: .08em; color: var(--accent); border: 1.5px solid var(--accent); border-radius: 4px; padding: 0 5px; }
+nav.tabs { display: flex; gap: 2px; flex-wrap: wrap; }
+nav.tabs a { text-decoration: none; color: var(--muted); font-weight: 600; padding: 6px 10px; border-radius: 6px; }
+nav.tabs a[aria-current="page"] { color: var(--fg); background: var(--surface-2); }
+nav.tabs a:hover { color: var(--fg); }
+.top-right { margin-left: auto; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+label.inline { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); font-weight: 600; font-size: 13px; }
+
+/* Controles */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; border: 1px solid var(--line); background: var(--surface); padding: 7px 12px; border-radius: 6px; cursor: pointer; font-weight: 600; white-space: nowrap; }
+.btn:hover { border-color: var(--muted); }
+.btn.primary { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
+.btn.primary:hover { filter: brightness(1.07); }
+.btn.danger { color: var(--neg); }
+.btn.danger.armed { background: var(--neg); color: var(--surface); border-color: var(--neg); }
+.btn.small { padding: 4px 8px; font-size: 13px; }
+.btn.link { border: 0; background: none; padding: 2px 4px; color: var(--accent); }
+.btn:disabled { opacity: .5; cursor: not-allowed; }
+input[type="text"], input[type="date"], input[type="number"], input[type="search"], select, textarea {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 7px 9px; min-width: 0;
+}
+textarea { width: 100%; resize: vertical; }
+.field { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.field > span { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px 12px; }
+.row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+
+main { padding-block: 18px 60px; }
+.view[hidden] { display: none; }
+
+/* Resumen */
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 14px; }
+.stat { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 10px 12px; text-align: left; cursor: default; }
+button.stat { cursor: pointer; }
+button.stat:hover { border-color: var(--muted); }
+.stat b { display: block; font-family: var(--f-display); font-size: 26px; font-weight: 700; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.stat span { color: var(--muted); font-size: 13px; }
+.stat.warn b { color: var(--neg); }
+.stat.attn b { color: var(--plan); }
+
+.filters { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 10px; }
+.filters input[type="search"] { flex: 1 1 220px; }
+
+/* Tabla */
+.tbl-wrap { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); }
+table { border-collapse: collapse; width: 100%; }
+th, td { padding: 8px 10px; text-align: left; border-bottom: 1px solid var(--line); vertical-align: middle; }
+th { font-size: 12px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); font-weight: 600; background: var(--surface); position: sticky; top: 0; }
+td.r, th.r { text-align: right; }
+tbody tr.click { cursor: pointer; }
+tbody tr.click:hover td { background: var(--surface-2); }
+tbody tr:last-child td { border-bottom: 0; }
+.name { font-weight: 600; }
+.chips { display: inline-flex; gap: 4px; flex-wrap: wrap; margin-left: 6px; vertical-align: middle; }
+.chip { font-size: 11px; font-weight: 600; letter-spacing: .03em; border-radius: 4px; padding: 1px 6px; background: var(--surface-2); color: var(--muted); white-space: nowrap; }
+.chip.attn { background: var(--plan-soft); color: var(--plan); }
+.chip.neg { background: var(--neg-soft); color: var(--neg); }
+.chip.acc { background: var(--accent-soft); color: var(--accent); }
+.pill { display: inline-flex; gap: 6px; align-items: baseline; border-radius: 999px; padding: 2px 10px; font-weight: 700; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.pill small { font-weight: 500; opacity: .85; }
+.pill.ok { background: var(--ok-soft); color: var(--ok); }
+.pill.zero { background: var(--surface-2); color: var(--muted); }
+.pill.neg { background: var(--neg-soft); color: var(--neg); }
+.empty { padding: 28px 16px; text-align: center; color: var(--muted); }
+.empty h3 { color: var(--fg); font-size: 20px; margin-bottom: 6px; }
+.note { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 12px 14px; margin-bottom: 14px; }
+.note.warn { border-color: var(--plan); background: var(--plan-soft); }
+
+/* Ficha (panel lateral) */
+.scrim { position: fixed; inset: 0; background: rgba(10, 18, 14, .35); z-index: 20; }
+aside.drawer { position: fixed; top: 0; right: 0; bottom: 0; width: min(600px, 100%); background: var(--bg); z-index: 21; box-shadow: var(--shadow); display: flex; flex-direction: column;
+  padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); padding-right: env(safe-area-inset-right, 0px); }
+.drawer-head { display: flex; gap: 10px; align-items: flex-start; padding: 14px 16px; background: var(--surface); border-bottom: 1px solid var(--line); }
+.drawer-head h2 { font-size: 24px; line-height: 1.15; }
+.drawer-head .sub { color: var(--muted); font-size: 13px; margin-top: 2px; }
+.drawer-head .x { margin-left: auto; }
+.drawer-body { overflow-y: auto; padding: 14px 16px 40px; display: flex; flex-direction: column; gap: 14px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 12px 14px; }
+.card h3 { font-size: 17px; margin-bottom: 10px; }
+.big-saldo { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.big-saldo b { font-family: var(--f-display); font-size: 40px; line-height: 1; font-variant-numeric: tabular-nums; }
+.big-saldo b.neg { color: var(--neg); }
+.big-saldo span { color: var(--muted); }
+.preview { border-radius: 6px; padding: 10px 12px; background: var(--surface-2); font-size: 13.5px; }
+.preview.neg { background: var(--neg-soft); }
+.preview ul { margin: 6px 0 0; padding-left: 18px; }
+.hist { list-style: none; margin: 0; padding: 0; }
+.hist li { display: grid; grid-template-columns: 1fr auto; gap: 4px 10px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.hist li:last-child { border-bottom: 0; }
+.hist .when { font-weight: 600; }
+.hist .meta { color: var(--muted); font-size: 13px; }
+.hist .acts { display: flex; gap: 4px; flex-wrap: wrap; justify-content: flex-end; align-items: start; }
+details > summary { cursor: pointer; font-family: var(--f-display); font-weight: 600; font-size: 17px; list-style: none; }
+details > summary::before { content: "▸ "; color: var(--muted); }
+details[open] > summary::before { content: "▾ "; }
+details[open] > summary { margin-bottom: 10px; }
+.periodos td, .periodos th { padding: 6px 8px; white-space: nowrap; }
+
+/* Grilla de planificación */
+.plan-wrap { overflow: auto; max-height: calc(100vh - 230px); background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); }
+table.plan th, table.plan td { padding: 0; border-bottom: 1px solid var(--line); border-right: 1px solid var(--line); text-align: center; }
+table.plan thead th { position: sticky; top: 0; z-index: 2; padding: 4px 2px; font-size: 11px; text-transform: none; letter-spacing: 0; }
+table.plan thead tr.months th { top: 0; }
+table.plan thead tr.days th { top: 24px; }
+table.plan .who { position: sticky; left: 0; z-index: 1; background: var(--surface); text-align: left; padding: 4px 8px; min-width: 210px; max-width: 240px; }
+table.plan thead .who { z-index: 3; }
+table.plan .who .nm { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 600; font-size: 13px; }
+table.plan .who .sd { font-size: 11.5px; color: var(--muted); }
+table.plan td.cell { width: 38px; min-width: 38px; height: 34px; cursor: pointer; font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums; }
+table.plan td.cell:hover { outline: 2px solid var(--accent); outline-offset: -2px; }
+td.cell.conf { background: var(--accent); color: var(--accent-fg); }
+td.cell.conf.part { background: var(--accent-soft); color: var(--accent); }
+td.cell.plan { background: repeating-linear-gradient(135deg, var(--plan-soft) 0 6px, transparent 6px 10px); color: var(--plan); }
+th.fer { color: var(--neg); }
+tr.tot td { font-weight: 700; font-size: 12px; background: var(--surface-2); padding: 6px 0; position: sticky; bottom: 0; }
+tr.tot td.who { background: var(--surface-2); }
+.legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12.5px; color: var(--muted); margin: 8px 0; }
+.legend i { display: inline-block; width: 14px; height: 14px; border-radius: 3px; vertical-align: -2px; margin-right: 5px; }
+
+.fer-list { display: flex; flex-direction: column; gap: 6px; }
+.fer-row { display: grid; grid-template-columns: 150px 1fr auto; gap: 6px; }
+@media (max-width: 520px) { .fer-row { grid-template-columns: 1fr auto; } .fer-row input[type="text"] { grid-column: 1 / -1; grid-row: 2; } }
+
+#toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(18px + env(safe-area-inset-bottom, 0px)); background: var(--fg); color: var(--bg); padding: 10px 16px; border-radius: 8px; z-index: 40; font-weight: 600; max-width: calc(100% - 32px); box-shadow: var(--shadow); }
+body.readonly .w { display: none !important; }
+@media (max-width: 640px) {
+  .hide-sm { display: none; }
+  .brand h1 { font-size: 20px; }
+  .top-right { margin-left: 0; width: 100%; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  aside.drawer { animation: slide .18s ease-out; }
+  @keyframes slide { from { transform: translateX(24px); } to { transform: none; } }
+}
+</style>
+
+<header class="top">
+  <div class="top-in wrap">
+    <div class="brand"><h1>Vacaciones</h1><span class="tag" id="brand-tag">GFI</span></div>
+    <nav class="tabs" aria-label="Secciones">
+      <a href="#empleados" data-view="empleados">Empleados</a>
+      <a href="#planificacion" data-view="planificacion">Planificación</a>
+      <a href="#configuracion" data-view="configuracion">Configuración</a>
+    </nav>
+    <div class="top-right">
+      <label class="inline" for="sel-anio">Período <select id="sel-anio"></select></label>
+      <button class="btn" data-act="exportar" id="btn-exportar">Descargar Excel</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div id="status"></div>
+
+  <section class="view" id="view-empleados">
+    <div class="stats" id="stats"></div>
+    <div class="filters">
+      <input type="search" id="f-q" placeholder="Buscar empleado…" aria-label="Buscar empleado">
+      <select id="f-empresa" aria-label="Empresa"><option value="">Todas las empresas</option></select>
+      <select id="f-sector" aria-label="Sector"><option value="">Todos los sectores</option><option>Planta</option><option>Administración</option></select>
+      <select id="f-estado" aria-label="Estado">
+        <option value="activos">Activos</option>
+        <option value="saldo">Con días disponibles</option>
+        <option value="anticipo">Con anticipo</option>
+        <option value="revisar">Para revisar</option>
+        <option value="baja">Dados de baja</option>
+        <option value="todos">Todos</option>
+      </select>
+      <button class="btn primary w" data-act="nuevo-emp">Agregar empleado</button>
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr>
+          <th>Empleado</th><th class="hide-sm">Ingreso</th><th class="r hide-sm">Antig.</th>
+          <th class="r">Le corresponden</th><th class="r hide-sm">Arrastre</th><th class="r hide-sm">Tomados</th><th>Le quedan</th>
+        </tr></thead>
+        <tbody id="emp-tbody"></tbody>
+      </table>
+    </div>
+    <p class="muted" style="margin-top:10px">Todo se cuenta en días hábiles (lunes a viernes). Equivalencia: 5 hábiles = 7 corridos, así que 14 corridos son 10 hábiles, 21 son 15, 28 son 20 y 35 son 25.</p>
+  </section>
+
+  <section class="view" id="view-planificacion" hidden>
+    <div class="card" style="margin-bottom:12px">
+      <div class="row" style="gap:12px">
+        <label class="field"><span>Desde</span><input type="date" id="p-desde"></label>
+        <label class="field"><span>Hasta</span><input type="date" id="p-hasta"></label>
+        <label class="field"><span>Empresa</span><select id="p-empresa"><option value="">Todas</option></select></label>
+        <label class="field"><span>Sector</span><select id="p-sector"><option value="">Todos</option><option>Planta</option><option>Administración</option></select></label>
+      </div>
+    </div>
+    <details class="card w" id="bulk" style="margin-bottom:12px">
+      <summary>Cargar las mismas fechas a varios empleados</summary>
+      <p class="muted" style="margin:0 0 10px">Para el cierre de planta: marcá los empleados en la grilla (casilla a la izquierda del nombre), elegí las fechas y cargá todo junto.</p>
+      <div class="grid2">
+        <label class="field"><span>Desde</span><input type="date" id="b-desde"></label>
+        <label class="field"><span>Hasta</span><input type="date" id="b-hasta"></label>
+        <label class="field"><span>Período</span><select id="b-anio"></select></label>
+        <label class="field"><span>Estado</span><select id="b-estado"><option value="planificado">Planificado</option><option value="confirmado">Confirmado</option></select></label>
+      </div>
+      <div class="preview" id="b-preview" style="margin-top:10px"></div>
+      <div class="row" style="margin-top:10px">
+        <button class="btn" data-act="bulk-todos">Marcar todos los de la grilla</button>
+        <button class="btn" data-act="bulk-ninguno">Desmarcar</button>
+        <button class="btn primary" data-act="bulk-cargar" id="b-cargar">Cargar</button>
+      </div>
+    </details>
+    <div class="legend">
+      <span><i style="background:var(--accent)"></i>Confirmado (semana completa)</span>
+      <span><i style="background:var(--accent-soft)"></i>Confirmado (algunos días)</span>
+      <span><i style="background:repeating-linear-gradient(135deg,var(--plan-soft) 0 4px,transparent 4px 7px);border:1px solid var(--plan)"></i>Planificado</span>
+      <span>El número es la cantidad de días corridos de esa semana. Tocá una celda para cargar esa semana.</span>
+    </div>
+    <div class="plan-wrap" id="plan-wrap"></div>
+  </section>
+
+  <section class="view" id="view-configuracion" hidden>
+    <div id="cfg-box"></div>
+  </section>
+</main>
+
+<div id="drawer-root"></div>
+<div id="toast" hidden></div>
+
+<script>/*@@CALC@@*/</script>
+<script>
+(function () {
+'use strict';
+const C = window.Calc;
+const JSPDF_URL = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+const XLSX_URL = 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
+const MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+const MES_CORTO = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+
+function periodoPorFecha() {
+  const n = new Date();
+  return n.getMonth() >= 9 ? n.getFullYear() : n.getFullYear() - 1; // desde octubre se otorga el período del año
+}
+const DEFAULT_CONFIG = {
+  periodoActivo: periodoPorFecha(),
+  feriadosDescuentan: false,
+  feriados: [],
+  localidad: '',
+  empresas: { GFI: 'GFI' },
+  subtituloNota: '(Artículo 154 - Ley 20.744)',
+  textoNota: 'Notificámosle que en cumplimiento a lo dispuesto por el artículo 154 de la Ley 20.744 comenzará el período de descanso anual que le corresponde, según se detalla a continuación.',
+};
+
+const S = {
+  cl: window.claude || null, db: null, canWrite: true, status: 'cargando',
+  config: null, emps: new Map(), movs: {}, subs: {}, byEmp: new Map(), cache: new Map(),
+  selAnio: null, view: 'empleados', ficha: null, bulkSel: new Set(), cfgDirty: false,
+};
+
+// ---------- utilidades ----------
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+const esc = (v) => String(v == null ? '' : v).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const cmpNombre = (a, b) => a.nombre.localeCompare(b.nombre, 'es', { sensitivity: 'base' });
+function cfg() { return Object.assign({}, DEFAULT_CONFIG, S.config || {}); }
+let ferMemo = { src: null, set: new Set(), map: new Map() };
+function feriados() {
+  const list = cfg().feriados;
+  if (ferMemo.src !== list) ferMemo = { src: list, set: new Set(list.map((f) => f.fecha)), map: new Map(list.map((f) => [f.fecha, f.nombre])) };
+  return ferMemo;
+}
+function fecha(isoStr) { return C.ddmmaaaa(isoStr); }
+function fechaCorta(isoStr) { const d = C.parse(isoStr); return d ? d.getUTCDate() + ' ' + MES_CORTO[d.getUTCMonth()] : ''; }
+function fechaLarga(isoStr) { const d = C.parse(isoStr); return d ? d.getUTCDate() + ' de ' + MESES[d.getUTCMonth()] + ' de ' + d.getUTCFullYear() : ''; }
+function apellido(nombre) { return String(nombre).split(',')[0].trim(); }
+let toastT;
+function toast(msg) {
+  const t = $('#toast'); t.textContent = msg; t.hidden = false;
+  clearTimeout(toastT); toastT = setTimeout(() => { t.hidden = true; }, 3800);
+}
+function loadScript(url) {
+  return new Promise((res, rej) => {
+    if ($$('script').some((s) => s.src === url)) return res();
+    const s = document.createElement('script'); s.src = url; s.onload = res; s.onerror = () => rej(new Error('No se pudo cargar ' + url));
+    document.head.appendChild(s);
+  });
+}
+function slug(s) {
+  return String(s).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 50);
+}
+function fmtHab(n) { return (Math.round(n * 10) / 10).toString(); }
+
+// ---------- datos derivados ----------
+function rebuild() {
+  const by = new Map();
+  for (const [anio, list] of Object.entries(S.movs)) {
+    for (const m of list) {
+      if (!by.has(m.empId)) by.set(m.empId, {});
+      const o = by.get(m.empId); (o[anio] = o[anio] || []).push(m);
+    }
+  }
+  S.byEmp = by; S.cache = new Map();
+}
+function anioInicio(e) {
+  if (e.inicio && e.inicio.anio) return +e.inicio.anio;
+  if (e.ingreso) return +e.ingreso.slice(0, 4);
+  return cfg().periodoActivo;
+}
+function saldosEmp(e) {
+  const hasta = Math.max(cfg().periodoActivo + 1, S.selAnio || 0);
+  const k = e.id + '|' + hasta;
+  if (!S.cache.has(k)) S.cache.set(k, C.saldos(e, S.byEmp.get(e.id) || {}, hasta));
+  return S.cache.get(k);
+}
+function filaPeriodo(e, anio) { return saldosEmp(e).find((r) => r.anio === anio) || null; }
+function movsEmp(id) {
+  const o = S.byEmp.get(id) || {};
+  return Object.values(o).flat();
+}
+function aniosDisponibles() {
+  const act = cfg().periodoActivo;
+  let min = act;
+  for (const e of S.emps.values()) min = Math.min(min, anioInicio(e));
+  min = Math.max(min, act - 6);
+  const out = []; for (let y = min; y <= act + 1; y++) out.push(y);
+  return out;
+}
+function saldoPill(r) {
+  if (!r) return '<span class="muted">—</span>';
+  if (r.saldo > 0) return `<span class="pill ok">${fmtHab(r.saldo)} háb <small>= ${fmtHab(r.saldoCorridos)} corr</small></span>`;
+  if (r.saldo === 0) return '<span class="pill zero">0</span>';
+  return `<span class="pill neg">Anticipo ${fmtHab(-r.saldo)} háb</span>`;
+}
+
+// ---------- conexión ----------
+async function boot() {
+  route();
+  renderAll();
+  const cl = S.cl;
+  if (!cl || typeof cl.use !== 'function') { S.status = 'sin-claude'; renderAll(); return; }
+  const slow = setTimeout(() => { if (S.status === 'cargando') { S.status = 'lento'; renderAll(); } }, 10000);
+  let db = null;
+  try { db = await cl.use('db'); } catch (e) { db = null; }
+  if (!db) { clearTimeout(slow); S.status = 'sin-db'; renderAll(); return; }
+  S.db = db;
+  cl.use('user').then(async (u) => {
+    if (!u) return;
+    const can = await u.can('data.write');
+    if (can === false) { S.canWrite = false; document.body.classList.add('readonly'); renderAll(); }
+  }).catch(() => {});
+  const fail = (err) => { console.error(err); if (err && err.code === 'revoked') { S.status = 'sin-db'; renderAll(); } else toast('No se pudieron leer los datos. Recargá la página.'); };
+  db.doc('config/general').onSnapshot((snap) => {
+    S.config = snap.exists ? snap.data() : null;
+    if (S.selAnio == null) S.selAnio = cfg().periodoActivo;
+    afterData();
+  }, fail);
+  db.collection('empleados').onSnapshot((snap) => {
+    S.emps = new Map(snap.docs.map((d) => [d.id, Object.assign({}, d.data(), { id: d.id })]));
+    if (!snap.metadata.fromCache || snap.size) { clearTimeout(slow); S.status = 'ok'; }
+    afterData();
+  }, fail);
+}
+function afterData() {
+  if (!S.db) return;
+  const act = cfg().periodoActivo;
+  for (const y of aniosDisponibles().concat([act + 1])) {
+    if (S.subs[y]) continue;
+    S.subs[y] = S.db.collection('periodos/' + y + '/movs').onSnapshot((snap) => {
+      S.movs[y] = snap.docs.map((d) => Object.assign({}, d.data(), { id: d.id, anio: y }));
+      rebuild(); schedule();
+    }, (err) => { console.error(err); });
+  }
+  rebuild(); schedule();
+}
+let raf = 0;
+function schedule() { if (!raf) raf = requestAnimationFrame(() => { raf = 0; renderAll(); }); }
+
+async function guardarMov(anio, id, data) {
+  const ref = S.db.collection('periodos/' + anio + '/movs').doc(id || undefined);
+  await ref.set(data);
+  return ref.id;
+}
+async function borrarMov(anio, id) { await S.db.doc('periodos/' + anio + '/movs/' + id).delete(); }
+function errMsg(e) {
+  if (e && e.code === 'quota_exceeded') return 'Se llenó el espacio de datos de la página.';
+  if (e && e.code === 'invalid_argument') return 'No tenés permiso para modificar estos datos.';
+  return 'No se pudo guardar. Probá de nuevo.';
+}
+
+// ---------- render ----------
+function route() {
+  const h = (location.hash || '').replace('#', '');
+  S.view = ['empleados', 'planificacion', 'configuracion'].includes(h) ? h : 'empleados';
+}
+function renderAll() {
+  renderStatus();
+  renderHeader();
+  $$('.view').forEach((v) => { v.hidden = v.id !== 'view-' + S.view; });
+  $$('nav.tabs a').forEach((a) => a.setAttribute('aria-current', a.dataset.view === S.view ? 'page' : 'false'));
+  if (S.view === 'empleados') renderEmpleados();
+  if (S.view === 'planificacion') renderPlan();
+  if (S.view === 'configuracion') renderConfig();
+  renderFichaDyn();
+}
+function renderStatus() {
+  const el = $('#status');
+  const msgs = {
+    'sin-claude': 'Esta página guarda los datos en tu cuenta de Claude. Abrila desde claude.ai para ver y cargar las vacaciones.',
+    'sin-db': 'No hay acceso a los datos guardados en esta vista. Abrí la página desde claude.ai con tu cuenta.',
+    'lento': 'Los datos están tardando en llegar. Revisá tu conexión; la página se actualiza sola cuando respondan.',
+  };
+  el.innerHTML = msgs[S.status] ? `<div class="note warn">${esc(msgs[S.status])}</div>` : '';
+}
+function renderHeader() {
+  const sel = $('#sel-anio');
+  const anios = aniosDisponibles();
+  const cur = S.selAnio || cfg().periodoActivo;
+  const html = anios.map((y) => `<option value="${y}"${y === cur ? ' selected' : ''}>${y}${y === cfg().periodoActivo ? ' (activo)' : ''}</option>`).join('');
+  if (sel.dataset.html !== html) { sel.innerHTML = html; sel.dataset.html = html; }
+  const emp = Object.keys(cfg().empresas || {});
+  $('#brand-tag').textContent = emp.length === 1 ? emp[0] : emp.join(' · ') || 'GFI';
+  for (const id of ['#f-empresa', '#p-empresa']) {
+    const s = $(id); const first = s.options[0].outerHTML;
+    const h2 = first + emp.map((k) => `<option value="${esc(k)}">${esc(k)}</option>`).join('');
+    if (s.dataset.html !== h2) { const v = s.value; s.innerHTML = h2; s.value = v; s.dataset.html = h2; }
+  }
+}
+
+function empleadosFiltrados() {
+  const q = slug($('#f-q').value || '').replace(/-/g, ' ');
+  const emp = $('#f-empresa').value, sec = $('#f-sector').value, est = $('#f-estado').value;
+  const anio = S.selAnio || cfg().periodoActivo;
+  return Array.from(S.emps.values()).filter((e) => {
+    const activo = e.activo !== false;
+    if (est === 'baja' ? activo : est !== 'todos' && !activo) return false;
+    if (emp && e.empresa !== emp) return false;
+    if (sec && e.sector !== sec) return false;
+    if (q && !slug(e.nombre).replace(/-/g, ' ').includes(q)) return false;
+    const r = filaPeriodo(e, anio);
+    if (est === 'saldo' && !(r && r.saldo > 0)) return false;
+    if (est === 'anticipo' && !(r && r.saldo < 0)) return false;
+    if (est === 'revisar' && !(e.revisar || !e.ingreso)) return false;
+    return true;
+  }).sort(cmpNombre);
+}
+
+function renderEmpleados() {
+  const anio = S.selAnio || cfg().periodoActivo;
+  const activos = Array.from(S.emps.values()).filter((e) => e.activo !== false);
+  let pend = 0, nAnt = 0, nRev = 0;
+  for (const e of activos) {
+    const r = filaPeriodo(e, anio);
+    if (r && r.saldo > 0) pend += r.saldo;
+    if (r && r.saldo < 0) nAnt++;
+    if (e.revisar || !e.ingreso) nRev++;
+  }
+  $('#stats').innerHTML = `
+    <div class="stat"><b>${activos.length}</b><span>empleados activos</span></div>
+    <button class="stat" data-act="filtro" data-v="saldo"><b>${fmtHab(pend)}</b><span>días hábiles por tomar del período ${anio}</span></button>
+    <button class="stat ${nAnt ? 'warn' : ''}" data-act="filtro" data-v="anticipo"><b>${nAnt}</b><span>con días adelantados (anticipo)</span></button>
+    <button class="stat ${nRev ? 'attn' : ''}" data-act="filtro" data-v="revisar"><b>${nRev}</b><span>para revisar (saldo importado o sin fecha de ingreso)</span></button>`;
+
+  const tb = $('#emp-tbody');
+  if (S.status === 'cargando' && !S.emps.size) { tb.innerHTML = '<tr><td colspan="7" class="empty">Cargando empleados…</td></tr>'; return; }
+  if (!S.emps.size) {
+    tb.innerHTML = `<tr><td colspan="7"><div class="empty"><h3>Todavía no hay empleados</h3>Agregá el primero con <b>Agregar empleado</b>, o pedile a Claude que importe tu planilla de Excel.</div></td></tr>`;
+    return;
+  }
+  const list = empleadosFiltrados();
+  if (!list.length) { tb.innerHTML = '<tr><td colspan="7" class="empty">Ningún empleado coincide con el filtro.</td></tr>'; return; }
+  tb.innerHTML = list.map((e) => {
+    const r = filaPeriodo(e, anio);
+    const chips = [];
+    if (e.empresa && Object.keys(cfg().empresas || {}).length > 1) chips.push(`<span class="chip">${esc(e.empresa)}</span>`);
+    if (!e.ingreso) chips.push('<span class="chip attn">completar ingreso</span>');
+    else if (e.revisar) chips.push('<span class="chip attn">revisar saldo</span>');
+    if (e.activo === false) chips.push('<span class="chip neg">baja</span>');
+    if (r && r.tipo === 'proporcional') chips.push('<span class="chip acc">proporcional</span>');
+    const corr = r ? (r.tipo === 'proporcional' ? `${r.derecho} háb` : `${r.derechoCorridos} <span class="muted">(${r.derecho} háb)</span>`) : '—';
+    return `<tr class="click" data-act="abrir" data-id="${esc(e.id)}" tabindex="0">
+      <td><span class="name">${esc(e.nombre)}</span><span class="chips">${chips.join('')}</span></td>
+      <td class="hide-sm num">${e.ingreso ? fecha(e.ingreso) : '—'}</td>
+      <td class="r num hide-sm">${r && r.antig != null ? r.antig : '—'}</td>
+      <td class="r num">${corr}</td>
+      <td class="r num hide-sm">${r ? (r.arrastre ? (r.arrastre > 0 ? '+' : '') + fmtHab(r.arrastre) : '0') : '—'}</td>
+      <td class="r num hide-sm">${r ? fmtHab(r.tomado) : '—'}</td>
+      <td>${saldoPill(r)}</td></tr>`;
+  }).join('');
+}
+
+// ---------- ficha ----------
+function abrirFicha(id, opts) {
+  S.ficha = Object.assign({ id, nuevo: !id, edit: null, prefill: null }, opts || {});
+  renderFicha();
+}
+function cerrarFicha() { S.ficha = null; $('#drawer-root').innerHTML = ''; }
+function renderFicha() {
+  const f = S.ficha; const root = $('#drawer-root');
+  if (!f) { root.innerHTML = ''; return; }
+  const e = f.nuevo ? { id: '', nombre: '', empresa: Object.keys(cfg().empresas)[0] || '', sector: 'Planta', convenio: 'Madera', activo: true } : S.emps.get(f.id);
+  if (!e) { cerrarFicha(); return; }
+  const anios = aniosEmp(e);
+  const def = f.prefill && f.prefill.anio ? f.prefill.anio : Math.max(anioInicio(e), Math.min(S.selAnio || cfg().periodoActivo, cfg().periodoActivo + 1));
+  const opt = (sel) => anios.map((y) => `<option value="${y}"${y === sel ? ' selected' : ''}>${y}</option>`).join('');
+  const empresas = Object.keys(cfg().empresas || {});
+  root.innerHTML = `
+  <div class="scrim" data-act="cerrar"></div>
+  <aside class="drawer" role="dialog" aria-modal="true" aria-labelledby="f-title">
+    <div class="drawer-head">
+      <div><h2 id="f-title">${f.nuevo ? 'Nuevo empleado' : esc(e.nombre)}</h2>
+      <div class="sub">${f.nuevo ? 'Completá los datos y guardá.' : esc([e.empresa, e.sector, e.convenio && 'Convenio ' + e.convenio, e.ingreso && 'Ingreso ' + fecha(e.ingreso)].filter(Boolean).join(' · '))}</div></div>
+      <button class="btn x" data-act="cerrar" aria-label="Cerrar">Cerrar</button>
+    </div>
+    <div class="drawer-body">
+      ${f.nuevo ? '' : `
+      <div class="card" id="f-resumen"></div>
+      <div class="card w" id="f-pedido">
+        <h3 id="f-pedido-title">Cargar vacaciones</h3>
+        <div class="grid2">
+          <label class="field"><span>Desde</span><input type="date" id="m-desde" value="${esc(f.prefill && f.prefill.desde || '')}"></label>
+          <label class="field"><span>Hasta (inclusive)</span><input type="date" id="m-hasta" value="${esc(f.prefill && f.prefill.hasta || '')}"></label>
+          <label class="field"><span>Período</span><select id="m-anio">${opt(def)}</select></label>
+          <label class="field"><span>Estado</span><select id="m-estado"><option value="confirmado">Confirmado</option><option value="planificado">Planificado</option></select></label>
+        </div>
+        <div class="row" style="margin-top:8px">
+          <span class="muted" style="font-size:13px">Atajos:</span>
+          <button class="btn small" data-act="atajo" data-d="7">1 semana</button>
+          <button class="btn small" data-act="atajo" data-d="14">2 semanas</button>
+          <button class="btn small" data-act="atajo" data-d="21">3 semanas</button>
+          <button class="btn small" data-act="atajo" data-d="saldo">Todo lo que le queda</button>
+        </div>
+        <label class="field" style="margin-top:10px"><span>Observación (opcional)</span><input type="text" id="m-obs" placeholder="Ej.: cierre de planta, trámite personal…"></label>
+        <div class="preview" id="m-preview" style="margin-top:10px"></div>
+        <div class="row" style="margin-top:10px">
+          <button class="btn primary" data-act="guardar-mov" id="m-guardar">Guardar</button>
+          <button class="btn" data-act="cancelar-edit" id="m-cancel" hidden>Cancelar edición</button>
+        </div>
+      </div>
+      <div class="card"><h3>Historial</h3><ul class="hist" id="f-hist"></ul></div>
+      <details class="card w"><summary>Ajuste manual de días</summary>
+        <p class="muted" style="margin:0 0 10px">Para sumar o restar días por un acuerdo especial o una corrección. Escribí un número negativo para restar.</p>
+        <div class="grid2">
+          <label class="field"><span>Días hábiles</span><input type="number" id="a-dias" step="1" placeholder="Ej.: 2 o -1"></label>
+          <label class="field"><span>Período</span><select id="a-anio">${opt(def)}</select></label>
+        </div>
+        <label class="field" style="margin-top:8px"><span>Motivo</span><input type="text" id="a-motivo" placeholder="Obligatorio"></label>
+        <div class="row" style="margin-top:10px"><button class="btn primary" data-act="guardar-ajuste">Guardar ajuste</button></div>
+      </details>`}
+      <details class="card" ${f.nuevo ? 'open' : ''}><summary>Datos del empleado</summary>
+        <div class="grid2">
+          <label class="field" style="grid-column:1/-1"><span>Apellido y nombre</span><input type="text" id="e-nombre" value="${esc(e.nombre)}" placeholder="APELLIDO, Nombre"></label>
+          <label class="field"><span>Fecha de ingreso</span><input type="date" id="e-ingreso" value="${esc(e.ingreso || '')}"></label>
+          <label class="field"><span>Empresa</span><select id="e-empresa">${empresas.map((k) => `<option${k === e.empresa ? ' selected' : ''}>${esc(k)}</option>`).join('')}</select></label>
+          <label class="field"><span>Sector</span><select id="e-sector">${['Planta', 'Administración'].map((k) => `<option${k === e.sector ? ' selected' : ''}>${k}</option>`).join('')}</select></label>
+          <label class="field"><span>Convenio</span><select id="e-convenio">${['Madera', 'Comercio', 'Fuera de convenio'].map((k) => `<option${k === e.convenio ? ' selected' : ''}>${k}</option>`).join('')}</select></label>
+          <label class="field"><span>Fecha de baja</span><input type="date" id="e-baja" value="${esc(e.baja || '')}"></label>
+          <label class="field"><span>Saldo inicial: período</span><input type="number" id="e-ini-anio" value="${esc(e.inicio && e.inicio.anio || (f.nuevo ? '' : anioInicio(e)))}" placeholder="Año de ingreso"></label>
+          <label class="field"><span>Saldo inicial: hábiles que arrastra</span><input type="number" id="e-ini-arr" step="1" value="${esc(e.inicio ? e.inicio.arrastre : 0)}"></label>
+        </div>
+        ${e.inicio && e.inicio.origen ? `<p class="muted" style="font-size:13px;margin:8px 0 0">Origen del saldo inicial: ${esc(e.inicio.origen)}. Positivo = días pendientes del año anterior; negativo = anticipo.</p>` : '<p class="muted" style="font-size:13px;margin:8px 0 0">Saldo inicial: positivo = días pendientes del año anterior; negativo = anticipo.</p>'}
+        <label class="row" style="margin-top:8px"><input type="checkbox" id="e-revisar" ${e.revisar ? 'checked' : ''}> Marcar para revisar</label>
+        <div class="row w" style="margin-top:10px">
+          <button class="btn primary" data-act="guardar-emp">${f.nuevo ? 'Crear empleado' : 'Guardar datos'}</button>
+          ${f.nuevo ? '' : '<button class="btn danger" data-act="borrar-emp">Eliminar empleado</button>'}
+        </div>
+      </details>
+    </div>
+  </aside>`;
+  renderFichaDyn();
+  const first = f.nuevo ? $('#e-nombre') : (f.prefill ? $('#m-hasta') : null);
+  if (first) first.focus(); else $('.drawer .x').focus();
+}
+function aniosEmp(e) {
+  const out = []; const act = cfg().periodoActivo;
+  for (let y = Math.min(anioInicio(e), act); y <= act + 1; y++) out.push(y);
+  return out;
+}
+function renderFichaDyn() {
+  const f = S.ficha;
+  if (!f || f.nuevo || !$('#f-resumen')) return;
+  const e = S.emps.get(f.id); if (!e) { cerrarFicha(); return; }
+  const anio = S.selAnio || cfg().periodoActivo;
+  const rows = saldosEmp(e);
+  const r = rows.find((x) => x.anio === anio) || rows[rows.length - 1];
+  const big = !r ? '<p class="muted">Sin períodos todavía.</p>' : r.saldo >= 0
+    ? `<div class="big-saldo"><b>${fmtHab(r.saldo)}</b><span>días hábiles le quedan del período ${r.anio}<br>= ${fmtHab(r.saldoCorridos)} días corridos</span></div>`
+    : `<div class="big-saldo"><b class="neg">−${fmtHab(-r.saldo)}</b><span>días hábiles de anticipo en el período ${r.anio}<br>se descuentan del período ${r.anio + 1}</span></div>`;
+  const notaDerecho = r && r.tipo === 'proporcional' ? `<p class="muted" style="font-size:13px">Ingresó en ${r.anio} y no llega a medio año trabajado: le corresponde 1 día cada 20 hábiles trabajados (art. 153 LCT).</p>`
+    : r && r.tipo === 'sin-ingreso' ? '<p class="muted" style="font-size:13px">Falta la fecha de ingreso: no se pueden calcular los días que le corresponden. Completala en <b>Datos del empleado</b>.</p>' : '';
+  $('#f-resumen').innerHTML = `${big}${notaDerecho}
+    <div class="tbl-wrap" style="margin-top:12px"><table class="periodos"><thead><tr><th>Período</th><th class="r">Corresponde</th><th class="r">Arrastre</th><th class="r">Ajustes</th><th class="r">Tomados</th><th>Saldo</th></tr></thead><tbody>
+    ${rows.map((x) => `<tr${x.anio === anio ? ' style="font-weight:600"' : ''}><td>${x.anio}</td><td class="r num">${x.derecho} háb${x.tipo === 'escala' ? ` <span class="muted">(${x.derechoCorridos} corr)</span>` : ''}</td><td class="r num">${fmtHab(x.arrastre)}</td><td class="r num">${fmtHab(x.ajustes)}</td><td class="r num">${fmtHab(x.tomado)}${x.planificado ? ` <span class="chip attn">${fmtHab(x.planificado)} plan.</span>` : ''}</td><td>${saldoPill(x)}</td></tr>`).join('')}
+    </tbody></table></div>`;
+  const ms = movsEmp(e.id).sort((a, b) => (b.desde || b.creado || '').localeCompare(a.desde || a.creado || ''));
+  $('#f-hist').innerHTML = ms.length ? ms.map((m) => m.tipo === 'ajuste'
+    ? `<li><div><div class="when">Ajuste ${m.dias > 0 ? '+' : ''}${m.dias} háb</div><div class="meta">Período ${m.anio} · ${esc(m.obs || '')}</div></div>
+       <div class="acts w"><button class="btn small danger" data-act="borrar-mov" data-anio="${m.anio}" data-mid="${esc(m.id)}">Eliminar</button></div></li>`
+    : `<li><div><div class="when">${esc(C.diaSemana(m.desde))} ${fecha(m.desde)} → ${esc(C.diaSemana(m.hasta))} ${fecha(m.hasta)}</div>
+       <div class="meta">${m.habiles} háb · ${m.corridos} corridos · período ${m.anio}${m.estado === 'planificado' ? ' · <span class="chip attn">planificado</span>' : ''}${m.fechaNota ? ' · notificado ' + fecha(m.fechaNota) : ''}${m.obs ? ' · ' + esc(m.obs) : ''}</div></div>
+       <div class="acts"><button class="btn small" data-act="nota" data-anio="${m.anio}" data-mid="${esc(m.id)}">Nota PDF</button>
+       <span class="w"><button class="btn small" data-act="editar-mov" data-anio="${m.anio}" data-mid="${esc(m.id)}">Editar</button>
+       <button class="btn small danger" data-act="borrar-mov" data-anio="${m.anio}" data-mid="${esc(m.id)}">Eliminar</button></span></div></li>`).join('')
+    : '<li><span class="muted">Sin vacaciones cargadas.</span></li>';
+  previewMov();
+}
+function leerMovForm() {
+  return { desde: $('#m-desde').value, hasta: $('#m-hasta').value, anio: +$('#m-anio').value, estado: $('#m-estado').value, obs: $('#m-obs').value.trim() };
+}
+function simular(e, anio, habiles, sinId) {
+  const base = S.byEmp.get(e.id) || {};
+  const movs = {};
+  for (const [y, list] of Object.entries(base)) movs[y] = list.filter((m) => m.id !== sinId);
+  movs[anio] = (movs[anio] || []).concat([{ tipo: 'vac', habiles }]);
+  return C.saldos(e, movs, Math.max(anio, cfg().periodoActivo + 1)).find((r) => r.anio === anio);
+}
+function superpuestos(empId, desde, hasta, sinId) {
+  return movsEmp(empId).filter((m) => m.tipo !== 'ajuste' && m.id !== sinId && m.desde <= hasta && m.hasta >= desde);
+}
+function previewMov() {
+  const p = $('#m-preview'); if (!p) return;
+  const e = S.emps.get(S.ficha.id); const v = leerMovForm();
+  const fer = feriados();
+  const r = C.contarRango(v.desde, v.hasta, fer.set, cfg().feriadosDescuentan);
+  if (!v.desde || !v.hasta) { p.className = 'preview'; p.innerHTML = 'Elegí desde y hasta para ver cuántos días descuenta.'; return; }
+  if (!r) { p.className = 'preview neg'; p.innerHTML = 'La fecha "hasta" tiene que ser igual o posterior a "desde".'; return; }
+  const s = simular(e, v.anio, r.habiles, S.ficha.edit);
+  const items = [];
+  items.push(`<b>Descuenta ${r.habiles} día${r.habiles === 1 ? '' : 's'} hábil${r.habiles === 1 ? '' : 'es'}</b> (${r.corridos} corrido${r.corridos === 1 ? '' : 's'}${r.finde ? ', incluye ' + r.finde + ' de fin de semana' : ''}).`);
+  if (r.feriados) {
+    const nombres = []; for (let d = C.parse(v.desde); d <= C.parse(v.hasta); d = C.addDays(d, 1)) { const n = fer.map.get(C.iso(d)); if (n && !C.esFinde(d)) nombres.push(fechaCorta(C.iso(d)) + ' ' + n); }
+    items.push(`Incluye ${r.feriados} feriado${r.feriados > 1 ? 's' : ''} (${esc(nombres.join(', '))}) que ${cfg().feriadosDescuentan ? 'sí descuenta' : 'no descuenta'}.`);
+  }
+  items.push(`Retoma tareas el ${C.diaSemana(C.retoma(v.hasta, fer.set))} ${fecha(C.retoma(v.hasta, fer.set))}.`);
+  if (s) {
+    items.push(s.saldo >= 0
+      ? `Le quedan <b>${fmtHab(s.saldo)} hábiles</b> (= ${fmtHab(s.saldoCorridos)} corridos) del período ${v.anio}.`
+      : `<b>Queda en anticipo: ${fmtHab(-s.saldo)} hábiles</b>; se descuentan del período ${v.anio + 1}.`);
+  }
+  const sup = superpuestos(e.id, v.desde, v.hasta, S.ficha.edit);
+  if (sup.length) items.push(`<b>Se superpone</b> con ${sup.map((m) => fecha(m.desde) + ' → ' + fecha(m.hasta)).join(', ')}.`);
+  p.className = 'preview' + ((s && s.saldo < 0) || sup.length ? ' neg' : '');
+  p.innerHTML = '<ul style="margin:0">' + items.map((i) => '<li>' + i + '</li>').join('') + '</ul>';
+}
+
+// ---------- planificación ----------
+function planRango() {
+  const act = cfg().periodoActivo;
+  const d = $('#p-desde'), h = $('#p-hasta');
+  if (!d.value) d.value = act + '-12-01';
+  if (!h.value) h.value = (act + 1) + '-03-31';
+  return { desde: d.value, hasta: h.value };
+}
+function renderPlan() {
+  const { desde, hasta } = planRango();
+  const sem = C.semanas(desde, hasta).slice(0, 60);
+  const fer = feriados();
+  const emp = $('#p-empresa').value, sec = $('#p-sector').value;
+  const list = Array.from(S.emps.values()).filter((e) => e.activo !== false && (!emp || e.empresa === emp) && (!sec || e.sector === sec)).sort(cmpNombre);
+  S.planList = list.map((e) => e.id);
+  const wrap = $('#plan-wrap');
+  if (!list.length) { wrap.innerHTML = '<div class="empty">No hay empleados para mostrar.</div>'; renderBulkPreview(); return; }
+  // encabezados
+  let months = ''; let prev = -1, span = 0, label = '';
+  const flush = () => { if (span) months += `<th colspan="${span}">${label}</th>`; };
+  for (const l of sem) { const m = C.parse(l).getUTCMonth(); if (m !== prev) { flush(); prev = m; span = 0; label = MESES[m]; } span++; }
+  flush();
+  const days = sem.map((l) => {
+    let nf = 0; for (let i = 0; i < 7; i++) if (fer.set.has(C.iso(C.addDays(C.parse(l), i)))) nf++;
+    return `<th class="${nf ? 'fer' : ''}" title="Semana del ${fecha(l)}${nf ? ' · ' + nf + ' feriado(s)' : ''}">${C.parse(l).getUTCDate()}${nf ? '*' : ''}</th>`;
+  }).join('');
+  const tot = new Array(sem.length).fill(0);
+  const anio = S.selAnio || cfg().periodoActivo;
+  const body = list.map((e) => {
+    const ms = movsEmp(e.id).filter((m) => m.tipo !== 'ajuste' && m.hasta >= sem[0] && m.desde <= hasta);
+    const r = filaPeriodo(e, anio);
+    const cells = sem.map((l, i) => {
+      let conf = 0, plan = 0;
+      for (const m of ms) { const n = C.diasEnSemana(m.desde, m.hasta, l); if (n) { if (m.estado === 'planificado') plan += n; else conf += n; } }
+      const n = Math.min(7, conf + plan);
+      if (n) tot[i]++;
+      const cls = n ? (plan && !conf ? 'plan' : 'conf' + (n < 7 ? ' part' : '')) : '';
+      return `<td class="cell ${cls}" data-act="plan-cell" data-id="${esc(e.id)}" data-l="${l}" title="${esc(e.nombre)} · semana del ${fecha(l)}${n ? ' · ' + n + ' días' : ''}">${n || ''}</td>`;
+    }).join('');
+    return `<tr><td class="who"><label class="row" style="gap:6px;flex-wrap:nowrap"><input type="checkbox" class="w" data-bulk="${esc(e.id)}" ${S.bulkSel.has(e.id) ? 'checked' : ''} aria-label="Seleccionar ${esc(e.nombre)}">
+      <span style="min-width:0"><span class="nm">${esc(e.nombre)}</span><span class="sd">${r ? (r.saldo >= 0 ? 'quedan ' + fmtHab(r.saldo) + ' háb' : 'anticipo ' + fmtHab(-r.saldo) + ' háb') : '—'}</span></span></label></td>${cells}</tr>`;
+  }).join('');
+  wrap.innerHTML = `<table class="plan"><thead><tr class="months"><th class="who" rowspan="2">Empleado <span class="muted">(${list.length})</span></th>${months}</tr><tr class="days">${days}</tr></thead>
+    <tbody>${body}<tr class="tot"><td class="who">De vacaciones</td>${tot.map((t) => `<td>${t || ''}</td>`).join('')}</tr></tbody></table>`;
+  renderBulkPreview();
+}
+function renderBulkPreview() {
+  const p = $('#b-preview'); if (!p) return;
+  const bs = $('#b-anio'); const anios = aniosDisponibles(); const cur = +bs.value || cfg().periodoActivo;
+  const h = anios.map((y) => `<option value="${y}"${y === cur ? ' selected' : ''}>${y}</option>`).join('');
+  if (bs.dataset.html !== h) { bs.innerHTML = h; bs.dataset.html = h; }
+  const d = $('#b-desde').value, ha = $('#b-hasta').value;
+  const sel = Array.from(S.bulkSel).map((id) => S.emps.get(id)).filter(Boolean);
+  $('#b-cargar').textContent = `Cargar a ${sel.length} empleado${sel.length === 1 ? '' : 's'}`;
+  const r = C.contarRango(d, ha, feriados().set, cfg().feriadosDescuentan);
+  if (!d || !ha) { p.textContent = 'Elegí las fechas.'; return; }
+  if (!r) { p.textContent = 'La fecha "hasta" tiene que ser igual o posterior a "desde".'; return; }
+  const anio = +bs.value;
+  const neg = sel.filter((e) => { const s = simular(e, anio, r.habiles, null); return s && s.saldo < 0; });
+  const sup = sel.filter((e) => superpuestos(e.id, d, ha, null).length);
+  p.innerHTML = `${fecha(d)} → ${fecha(ha)}: <b>${r.habiles} hábiles</b> (${r.corridos} corridos) a ${sel.length} empleado${sel.length === 1 ? '' : 's'}.` +
+    (neg.length ? `<br>Quedarían en anticipo: ${neg.map((e) => esc(apellido(e.nombre))).join(', ')}.` : '') +
+    (sup.length ? `<br>Ya tienen vacaciones en esas fechas (no se les carga): ${sup.map((e) => esc(apellido(e.nombre))).join(', ')}.` : '');
+}
+
+// ---------- configuración ----------
+function renderConfig() {
+  if (S.cfgDirty && $('#cfg-form')) return;
+  const c = cfg();
+  const emp = Object.entries(c.empresas || {});
+  $('#cfg-box').innerHTML = `
+  <form id="cfg-form" class="card" style="display:flex;flex-direction:column;gap:16px;max-width:820px">
+    <div>
+      <h3>Período activo</h3>
+      <p class="muted" style="margin:0 0 8px">Es el período que se está otorgando ahora. Las vacaciones del período 2026 se toman entre octubre de 2026 y abril de 2027 (o cuando se acuerde).</p>
+      <label class="field" style="max-width:160px"><span>Período</span><input type="number" id="c-periodo" value="${esc(c.periodoActivo)}"></label>
+    </div>
+    <div>
+      <h3>Feriados</h3>
+      <label class="row" style="margin:6px 0 10px"><input type="checkbox" id="c-ferdesc" ${c.feriadosDescuentan ? 'checked' : ''}> Los feriados que caen dentro de las vacaciones descuentan días</label>
+      <div class="fer-list" id="c-fer">${c.feriados.slice().sort((a, b) => a.fecha.localeCompare(b.fecha)).map(ferRow).join('')}</div>
+      <div class="row w" style="margin-top:8px"><button type="button" class="btn small" data-act="add-fer">Agregar feriado</button></div>
+    </div>
+    <div>
+      <h3>Nota de notificación</h3>
+      <div class="grid2">
+        <label class="field"><span>Localidad</span><input type="text" id="c-loc" value="${esc(c.localidad)}"></label>
+        <label class="field"><span>Subtítulo</span><input type="text" id="c-sub" value="${esc(c.subtituloNota)}"></label>
+      </div>
+      <label class="field" style="margin-top:8px"><span>Texto</span><textarea id="c-texto" rows="3">${esc(c.textoNota)}</textarea></label>
+    </div>
+    <div>
+      <h3>Empresas</h3>
+      <p class="muted" style="margin:0 0 8px">Sigla y razón social (aparece en la nota).</p>
+      <div class="fer-list" id="c-emp">${emp.map(([k, v]) => `<div class="fer-row"><input type="text" value="${esc(k)}" aria-label="Sigla"><input type="text" value="${esc(v)}" aria-label="Razón social"><button type="button" class="btn small w" data-act="del-row">Quitar</button></div>`).join('')}</div>
+      <div class="row w" style="margin-top:8px"><button type="button" class="btn small" data-act="add-emp">Agregar empresa</button></div>
+    </div>
+    <div class="row w"><button type="submit" class="btn primary">Guardar configuración</button><span class="muted" id="c-msg"></span></div>
+  </form>`;
+}
+function ferRow(f) {
+  return `<div class="fer-row"><input type="date" value="${esc(f.fecha)}" aria-label="Fecha"><input type="text" value="${esc(f.nombre)}" aria-label="Nombre del feriado"><button type="button" class="btn small w" data-act="del-row">Quitar</button></div>`;
+}
+
+// ---------- acciones ----------
+const ACT = {
+  abrir: (el) => abrirFicha(el.dataset.id),
+  cerrar: () => cerrarFicha(),
+  'nuevo-emp': () => abrirFicha(null),
+  filtro: (el) => { $('#f-estado').value = el.dataset.v; renderEmpleados(); },
+  atajo: (el) => {
+    const d = $('#m-desde'); if (!d.value) { toast('Elegí primero la fecha "desde".'); d.focus(); return; }
+    if (el.dataset.d === 'saldo') {
+      const e = S.emps.get(S.ficha.id); const r = filaPeriodo(e, +$('#m-anio').value);
+      const quedan = r ? r.saldo + (S.ficha.edit ? (movsEmp(e.id).find((m) => m.id === S.ficha.edit) || {}).habiles || 0 : 0) : 0;
+      if (!(quedan > 0)) { toast('No le quedan días en ese período.'); return; }
+      let h = C.parse(d.value), n = 0; const fer = feriados().set;
+      for (;;) { const iso = C.iso(h); if (!C.esFinde(h) && (cfg().feriadosDescuentan || !fer.has(iso))) n++; if (n >= quedan) break; h = C.addDays(h, 1); }
+      // si termina un viernes, incluir el fin de semana para que cuadre con los corridos
+      while (C.esFinde(C.addDays(h, 1))) h = C.addDays(h, 1);
+      $('#m-hasta').value = C.iso(h);
+    } else {
+      $('#m-hasta').value = C.iso(C.addDays(C.parse(d.value), +el.dataset.d - 1));
+    }
+    previewMov();
+  },
+  'guardar-mov': async (el) => {
+    const e = S.emps.get(S.ficha.id); const v = leerMovForm();
+    const r = C.contarRango(v.desde, v.hasta, feriados().set, cfg().feriadosDescuentan);
+    if (!r) { toast('Revisá las fechas.'); return; }
+    el.disabled = true;
+    try {
+      const prev = S.ficha.edit ? movsEmp(e.id).find((m) => m.id === S.ficha.edit) : null;
+      const data = { empId: e.id, tipo: 'vac', desde: v.desde, hasta: v.hasta, habiles: r.habiles, corridos: r.corridos, estado: v.estado, obs: v.obs,
+        fechaNota: prev && prev.fechaNota || null, creado: prev && prev.creado || new Date().toISOString() };
+      if (prev && prev.anio !== v.anio) { await guardarMov(v.anio, null, data); await borrarMov(prev.anio, prev.id); }
+      else await guardarMov(v.anio, prev ? prev.id : null, data);
+      toast(prev ? 'Pedido actualizado.' : `Guardado: ${r.habiles} hábiles para ${apellido(e.nombre)}.`);
+      S.ficha.edit = null; S.ficha.prefill = null;
+      $('#m-desde').value = ''; $('#m-hasta').value = ''; $('#m-obs').value = '';
+      $('#f-pedido-title').textContent = 'Cargar vacaciones'; $('#m-cancel').hidden = true; $('#m-guardar').textContent = 'Guardar';
+    } catch (err) { console.error(err); toast(errMsg(err)); }
+    el.disabled = false; previewMov();
+  },
+  'editar-mov': (el) => {
+    const m = movsEmp(S.ficha.id).find((x) => x.id === el.dataset.mid); if (!m) return;
+    S.ficha.edit = m.id;
+    $('#m-desde').value = m.desde; $('#m-hasta').value = m.hasta; $('#m-anio').value = String(m.anio); $('#m-estado').value = m.estado || 'confirmado'; $('#m-obs').value = m.obs || '';
+    $('#f-pedido-title').textContent = 'Editar pedido'; $('#m-cancel').hidden = false; $('#m-guardar').textContent = 'Guardar cambios';
+    $('#f-pedido').scrollIntoView({ behavior: 'smooth', block: 'start' }); previewMov();
+  },
+  'cancelar-edit': () => {
+    S.ficha.edit = null; $('#m-desde').value = ''; $('#m-hasta').value = ''; $('#m-obs').value = '';
+    $('#f-pedido-title').textContent = 'Cargar vacaciones'; $('#m-cancel').hidden = true; $('#m-guardar').textContent = 'Guardar'; previewMov();
+  },
+  'borrar-mov': async (el) => {
+    if (!armar(el)) return;
+    try { await borrarMov(+el.dataset.anio, el.dataset.mid); toast('Eliminado.'); } catch (err) { toast(errMsg(err)); }
+  },
+  'guardar-ajuste': async (el) => {
+    const dias = Number($('#a-dias').value), motivo = $('#a-motivo').value.trim(), anio = +$('#a-anio').value;
+    if (!dias || !Number.isInteger(dias)) { toast('Escribí una cantidad entera de días (puede ser negativa).'); return; }
+    if (!motivo) { toast('Escribí el motivo del ajuste.'); return; }
+    el.disabled = true;
+    try {
+      await guardarMov(anio, null, { empId: S.ficha.id, tipo: 'ajuste', dias, obs: motivo, creado: new Date().toISOString() });
+      $('#a-dias').value = ''; $('#a-motivo').value = ''; toast('Ajuste guardado.');
+    } catch (err) { toast(errMsg(err)); }
+    el.disabled = false;
+  },
+  'guardar-emp': async (el) => {
+    const f = S.ficha; const nombre = $('#e-nombre').value.trim();
+    if (!nombre) { toast('Escribí el apellido y nombre.'); return; }
+    const ingreso = $('#e-ingreso').value || null;
+    const old = f.nuevo ? {} : S.emps.get(f.id);
+    const iniAnio = +$('#e-ini-anio').value || (ingreso ? +ingreso.slice(0, 4) : cfg().periodoActivo);
+    const data = Object.assign({}, old, {
+      nombre, ingreso, empresa: $('#e-empresa').value, sector: $('#e-sector').value, convenio: $('#e-convenio').value,
+      baja: $('#e-baja').value || null, activo: !$('#e-baja').value, revisar: $('#e-revisar').checked,
+      inicio: Object.assign({}, old.inicio || {}, { anio: iniAnio, arrastre: Number($('#e-ini-arr').value) || 0 }),
+    });
+    delete data.id;
+    const id = f.nuevo ? (slug(nombre) || 'emp') + '-' + Math.random().toString(36).slice(2, 6) : f.id;
+    el.disabled = true;
+    try {
+      await S.db.doc('empleados/' + id).set(data);
+      toast(f.nuevo ? 'Empleado creado.' : 'Datos guardados.');
+      if (f.nuevo) { S.emps.set(id, Object.assign({}, data, { id })); abrirFicha(id); }
+    } catch (err) { toast(errMsg(err)); }
+    el.disabled = false;
+  },
+  'borrar-emp': async (el) => {
+    if (movsEmp(S.ficha.id).length) { toast('Tiene vacaciones cargadas: para conservar el historial, cargá una fecha de baja en lugar de eliminarlo.'); return; }
+    if (!armar(el)) return;
+    try { await S.db.doc('empleados/' + S.ficha.id).delete(); cerrarFicha(); toast('Empleado eliminado.'); } catch (err) { toast(errMsg(err)); }
+  },
+  nota: (el) => notaPDF(S.ficha.id, +el.dataset.anio, el.dataset.mid),
+  exportar: () => exportarExcel(),
+  'plan-cell': (el) => {
+    const l = el.dataset.l;
+    abrirFicha(el.dataset.id, { prefill: { desde: l, hasta: C.iso(C.addDays(C.parse(l), 6)) } });
+  },
+  'bulk-todos': () => { (S.planList || []).forEach((id) => S.bulkSel.add(id)); renderPlan(); },
+  'bulk-ninguno': () => { S.bulkSel.clear(); renderPlan(); },
+  'bulk-cargar': async (el) => {
+    const d = $('#b-desde').value, h = $('#b-hasta').value, anio = +$('#b-anio').value, estado = $('#b-estado').value;
+    const r = C.contarRango(d, h, feriados().set, cfg().feriadosDescuentan);
+    if (!r) { toast('Revisá las fechas.'); return; }
+    const ids = Array.from(S.bulkSel).filter((id) => S.emps.has(id) && !superpuestos(id, d, h, null).length);
+    if (!ids.length) { toast('Marcá al menos un empleado sin vacaciones en esas fechas.'); return; }
+    el.disabled = true; let ok = 0;
+    try {
+      for (let i = 0; i < ids.length; i += 5) {
+        await Promise.all(ids.slice(i, i + 5).map((id) => guardarMov(anio, null, { empId: id, tipo: 'vac', desde: d, hasta: h, habiles: r.habiles, corridos: r.corridos, estado, obs: '', fechaNota: null, creado: new Date().toISOString() }).then(() => ok++)));
+      }
+      toast(`Cargado a ${ok} empleados.`); S.bulkSel.clear();
+    } catch (err) { toast(errMsg(err) + ` (${ok} cargados)`); }
+    el.disabled = false; renderPlan();
+  },
+  'add-fer': () => { S.cfgDirty = true; $('#c-fer').insertAdjacentHTML('beforeend', ferRow({ fecha: '', nombre: '' })); },
+  'add-emp': () => { S.cfgDirty = true; $('#c-emp').insertAdjacentHTML('beforeend', '<div class="fer-row"><input type="text" aria-label="Sigla"><input type="text" aria-label="Razón social"><button type="button" class="btn small w" data-act="del-row">Quitar</button></div>'); },
+  'del-row': (el) => { S.cfgDirty = true; el.closest('.fer-row').remove(); },
+};
+function armar(el) {
+  if (el.classList.contains('armed')) return true;
+  const txt = el.textContent; el.classList.add('armed'); el.textContent = '¿Seguro? Tocá de nuevo';
+  setTimeout(() => { el.classList.remove('armed'); el.textContent = txt; }, 4000);
+  return false;
+}
+
+async function guardarConfig(ev) {
+  ev.preventDefault();
+  const periodo = +$('#c-periodo').value;
+  if (!(periodo > 2000 && periodo < 2100)) { toast('El período tiene que ser un año, por ejemplo 2026.'); return; }
+  const fer = $$('#c-fer .fer-row').map((r) => ({ fecha: r.children[0].value, nombre: r.children[1].value.trim() })).filter((f) => f.fecha);
+  const empresas = {};
+  $$('#c-emp .fer-row').forEach((r) => { const k = r.children[0].value.trim(); if (k) empresas[k] = r.children[1].value.trim() || k; });
+  if (!Object.keys(empresas).length) { toast('Tiene que haber al menos una empresa.'); return; }
+  const data = Object.assign({}, cfg(), {
+    periodoActivo: periodo, feriadosDescuentan: $('#c-ferdesc').checked, feriados: fer.sort((a, b) => a.fecha.localeCompare(b.fecha)),
+    localidad: $('#c-loc').value.trim(), subtituloNota: $('#c-sub').value.trim(), textoNota: $('#c-texto').value.trim(), empresas,
+  });
+  try { await S.db.doc('config/general').set(data); S.cfgDirty = false; S.selAnio = periodo; toast('Configuración guardada.'); renderAll(); }
+  catch (err) { toast(errMsg(err)); }
+}
+
+// ---------- nota PDF ----------
+async function notaPDF(empId, anio, movId) {
+  const e = S.emps.get(empId); const m = (S.movs[anio] || []).find((x) => x.id === movId);
+  if (!e || !m) return;
+  const dl = S.cl && await S.cl.use('downloads');
+  if (!dl) { toast('Esta vista no permite descargar archivos. Abrí la página desde claude.ai.'); return; }
+  try { await loadScript(JSPDF_URL); } catch (err) { toast('No se pudo preparar el PDF. Revisá la conexión.'); return; }
+  const c = cfg(); const fer = feriados().set;
+  const fNota = m.fechaNota || C.hoyISO();
+  const doc = new window.jspdf.jsPDF({ unit: 'mm', format: 'a4' });
+  const W = 210, M = 20;
+  const dibujar = (y0) => {
+    let y = y0 + 16;
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(9);
+    doc.text((c.empresas && c.empresas[e.empresa]) || e.empresa || '', M, y);
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(13);
+    y += 8; doc.text('PERÍODO DE DESCANSO ANUAL', W / 2, y, { align: 'center' });
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(10);
+    y += 5; doc.text(c.subtituloNota || '', W / 2, y, { align: 'center' });
+    doc.setFontSize(11);
+    y += 10; doc.text(`${c.localidad ? c.localidad + ', ' : ''}${fechaLarga(fNota)}`, W - M, y, { align: 'right' });
+    y += 8; doc.text('Señor/a: ', M, y); doc.setFont('helvetica', 'bold'); doc.text(e.nombre, M + 17, y); doc.setFont('helvetica', 'normal');
+    y += 8; const lines = doc.splitTextToSize(c.textoNota || '', W - 2 * M); doc.text(lines, M, y); y += lines.length * 5 + 4;
+    const fila = (k, v) => { doc.setFont('helvetica', 'bold'); doc.text(k, M + 6, y); doc.setFont('helvetica', 'normal'); doc.text(v, M + 62, y); y += 6.5; };
+    fila('CORRESPONDEN AL AÑO:', String(anio));
+    fila('PERÍODO DE:', `${m.corridos} (${C.enLetras(m.corridos)}) DÍAS`);
+    fila('DESDE:', `${C.diaSemana(m.desde)} ${fecha(m.desde)}   HASTA: ${C.diaSemana(m.hasta)} ${fecha(m.hasta)} (inclusive)`);
+    const ret = C.retoma(m.hasta, fer);
+    fila('RETOMA TAREAS EL:', `${C.diaSemana(ret)} ${fecha(ret)} (en su horario habitual)`);
+    y += 12; doc.line(W - M - 60, y, W - M, y); doc.setFontSize(9); doc.text('Firma del empleador', W - M - 30, y + 4, { align: 'center' });
+    doc.setFontSize(10); y += 11; doc.text('En la fecha me notifico, recibiendo copia de la presente.', M, y);
+    y += 14; doc.line(M, y, M + 60, y); doc.line(W - M - 60, y, W - M, y);
+    doc.setFontSize(9); doc.text('Firma del empleado', M + 30, y + 4, { align: 'center' }); doc.text('Aclaración de firma', W - M - 30, y + 4, { align: 'center' });
+  };
+  dibujar(0);
+  doc.setLineDashPattern([2, 2], 0); doc.setDrawColor(150); doc.line(8, 148.5, W - 8, 148.5); doc.setLineDashPattern([], 0); doc.setDrawColor(0);
+  dibujar(148.5);
+  const nombreArch = `notificacion-${slug(apellido(e.nombre))}-${m.desde}.pdf`;
+  try {
+    await dl.save({ filename: nombreArch, data: doc.output('arraybuffer') });
+    if (!m.fechaNota && S.canWrite) { try { await S.db.doc('periodos/' + anio + '/movs/' + m.id).update({ fechaNota: fNota }); } catch (err) { /* sin permiso: no pasa nada */ } }
+  } catch (err) {
+    if (err && err.code !== 'declined') toast('No se pudo descargar el PDF.');
+  }
+}
+
+// ---------- exportar ----------
+async function exportarExcel() {
+  const dl = S.cl && await S.cl.use('downloads');
+  if (!dl) { toast('Esta vista no permite descargar archivos. Abrí la página desde claude.ai.'); return; }
+  try { await loadScript(XLSX_URL); } catch (err) { toast('No se pudo preparar el Excel. Revisá la conexión.'); return; }
+  const X = window.XLSX; const anio = S.selAnio || cfg().periodoActivo;
+  const emps = Array.from(S.emps.values()).sort(cmpNombre);
+  const saldos = [['Empleado', 'Empresa', 'Sector', 'Convenio', 'Ingreso', 'Antigüedad', 'Corresponde (corridos)', 'Corresponde (hábiles)', 'Arrastre (háb)', 'Ajustes (háb)', 'Tomados (háb)', 'Planificados (háb)', 'Saldo (háb)', 'Saldo (corridos)', 'Estado']];
+  for (const e of emps) {
+    const r = filaPeriodo(e, anio);
+    saldos.push([e.nombre, e.empresa || '', e.sector || '', e.convenio || '', e.ingreso ? fecha(e.ingreso) : '', r ? r.antig : '', r ? r.derechoCorridos : '', r ? r.derecho : '', r ? r.arrastre : '', r ? r.ajustes : '', r ? r.tomado : '', r ? r.planificado : '', r ? r.saldo : '', r ? r.saldoCorridos : '', e.activo === false ? 'Baja' : 'Activo']);
+  }
+  const movs = [['Empleado', 'Período', 'Tipo', 'Desde', 'Hasta', 'Corridos', 'Hábiles', 'Estado', 'Notificado', 'Observación']];
+  for (const [y, list] of Object.entries(S.movs)) for (const m of list) {
+    const e = S.emps.get(m.empId);
+    movs.push([e ? e.nombre : m.empId, +y, m.tipo === 'ajuste' ? 'Ajuste' : 'Vacaciones', m.desde ? fecha(m.desde) : '', m.hasta ? fecha(m.hasta) : '', m.corridos || '', m.tipo === 'ajuste' ? m.dias : m.habiles, m.estado || '', m.fechaNota ? fecha(m.fechaNota) : '', m.obs || '']);
+  }
+  movs.splice(1, movs.length, ...movs.slice(1).sort((a, b) => String(a[0]).localeCompare(String(b[0]), 'es') || a[1] - b[1]));
+  const wb = X.utils.book_new();
+  const s1 = X.utils.aoa_to_sheet(saldos); s1['!cols'] = [{ wch: 34 }, { wch: 8 }, { wch: 14 }, { wch: 12 }, { wch: 11 }];
+  const s2 = X.utils.aoa_to_sheet(movs); s2['!cols'] = [{ wch: 34 }, { wch: 8 }, { wch: 11 }, { wch: 11 }, { wch: 11 }];
+  X.utils.book_append_sheet(wb, s1, 'Saldos ' + anio);
+  X.utils.book_append_sheet(wb, s2, 'Vacaciones cargadas');
+  const buf = X.write(wb, { bookType: 'xlsx', type: 'array' });
+  try { await dl.save({ filename: `vacaciones-${anio}-${C.hoyISO()}.xlsx`, data: buf }); }
+  catch (err) { if (err && err.code !== 'declined') toast('No se pudo descargar el Excel.'); }
+}
+
+// ---------- eventos ----------
+document.addEventListener('click', (ev) => {
+  const el = ev.target.closest('[data-act]');
+  if (!el || !ACT[el.dataset.act]) return;
+  if (el.tagName === 'A') ev.preventDefault();
+  ACT[el.dataset.act](el, ev);
+});
+document.addEventListener('keydown', (ev) => {
+  if (ev.key === 'Escape' && S.ficha) cerrarFicha();
+  if (ev.key === 'Enter' && ev.target.matches('tr[data-act="abrir"]')) abrirFicha(ev.target.dataset.id);
+});
+document.addEventListener('input', (ev) => {
+  const t = ev.target;
+  if (t.id === 'f-q') renderEmpleados();
+  else if (['m-desde', 'm-hasta', 'm-anio', 'm-estado'].includes(t.id)) {
+    if (t.id === 'm-desde' && t.value && (!$('#m-hasta').value || $('#m-hasta').value < t.value)) $('#m-hasta').value = t.value;
+    previewMov();
+  } else if (['b-desde', 'b-hasta', 'b-anio'].includes(t.id)) {
+    if (t.id === 'b-desde' && t.value && (!$('#b-hasta').value || $('#b-hasta').value < t.value)) $('#b-hasta').value = t.value;
+    renderBulkPreview();
+  } else if (t.closest && t.closest('#cfg-form')) S.cfgDirty = true;
+});
+document.addEventListener('change', (ev) => {
+  const t = ev.target;
+  if (['f-empresa', 'f-sector', 'f-estado'].includes(t.id)) renderEmpleados();
+  else if (['p-desde', 'p-hasta', 'p-empresa', 'p-sector'].includes(t.id)) renderPlan();
+  else if (t.id === 'sel-anio') { S.selAnio = +t.value; S.cache = new Map(); renderAll(); }
+  else if (t.dataset && t.dataset.bulk) { if (t.checked) S.bulkSel.add(t.dataset.bulk); else S.bulkSel.delete(t.dataset.bulk); renderBulkPreview(); }
+  else if (t.id === 'b-estado') renderBulkPreview();
+});
+document.addEventListener('submit', (ev) => { if (ev.target.id === 'cfg-form') guardarConfig(ev); });
+window.addEventListener('hashchange', () => { route(); renderAll(); });
+
+boot();
+})();
+</script>
