@@ -27,16 +27,22 @@ def norm(s):
     return re.sub(r"\s+", " ", s).strip()
 
 
-def clave(nombre):
-    """Apellido + inicial del primer nombre, para cruzar hojas con nombres escritos distinto."""
+def partes(nombre):
+    """(apellido, primer nombre) normalizados. 'GARELLI ADRIAN' y 'GARELLI, ADRIÁN EDUARDO' -> ('GARELLI', 'ADRIAN')."""
     n = norm(nombre)
     if "," in n:
         ape, nom = n.split(",", 1)
     else:
-        partes = n.split(" ")
-        ape, nom = partes[0], " ".join(partes[1:])
-    nom = nom.strip()
-    return re.sub(r" ", "", ape) + "|" + (nom[:1] if nom else "")
+        p = n.split(" ")
+        ape, nom = p[0], " ".join(p[1:])
+    nom = nom.strip().split(" ")[0] if nom.strip() else ""
+    return ape.replace(" ", ""), nom
+
+
+def misma_persona(a, b):
+    """Mismo apellido y un primer nombre es abreviatura del otro (M. / MA. / MARIA)."""
+    (a1, n1), (b1, n2) = partes(a), partes(b)
+    return a1 == b1 and bool(n1) and bool(n2) and (n1.startswith(n2) or n2.startswith(n1))
 
 
 def slug(nombre):
@@ -140,7 +146,7 @@ def main():
             notas.append(f"pendiente {args.anio - 1}: {pend:g} días → {a_habiles(pend)} háb.")
         if antic:
             notas.append(f"anticipo {args.anio}: {antic:g} días → {a_habiles(antic)} háb.")
-        k = clave(nombre)
+        k = slug(nombre)
         empleados[k] = {
             "id": slug(nombre),
             "nombre": titulo(nombre),
@@ -165,11 +171,13 @@ def main():
             emp, nombre = wa.cell(r, 1).value, wa.cell(r, 2).value
             if not nombre or emp not in ("GFI", "AZ"):
                 continue
-            k = clave(nombre)
-            if k in empleados:
-                empleados[k].update({"empresa": emp, "sector": "Administración", "convenio": "Comercio"})
+            igual = [e for e in empleados.values() if e["ingreso"] and misma_persona(e["nombre"], nombre)]
+            if len(igual) > 1:
+                sys.exit(f"'{nombre}' coincide con más de un empleado: {[e['nombre'] for e in igual]}")
+            if igual:
+                igual[0].update({"empresa": emp, "sector": "Administración", "convenio": "Comercio"})
                 continue
-            empleados[k] = {
+            empleados[slug(nombre)] = {
                 "id": slug(nombre),
                 "nombre": titulo(nombre),
                 "ingreso": None,

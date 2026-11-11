@@ -40,7 +40,7 @@ const check = (cond, msg) => { if (!cond) { console.log('FALLA:', msg); process.
 
 const page = await open({ viewport: { width: 1280, height: 900 } });
 const rows = await page.$$eval('tr[data-act="abrir"]', (r) => r.length);
-check(rows === 70, `lista 70 empleados activos (${rows})`);
+check(rows === 71, `lista 71 empleados activos (${rows})`);
 await page.screenshot({ path: outDir + '/1-empleados.png' });
 
 // Alfaro: 21 corridos (15 háb) + arrastre 5 = 20 háb
