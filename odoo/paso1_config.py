@@ -28,20 +28,22 @@ for nombre in ["Planta", "Administración", "Convenio Madera", "Convenio Comerci
     t = uno("hr.employee.category", [["name", "=", nombre]]) or call("hr.employee.category", "create", vals_list=[{"name": nombre}])[0]
     ids["etiquetas"][nombre] = t
 
-# 4. Feriados: uno por fecha, sin compañía ni horario (Odoo no admite dos feriados superpuestos). Día completo en hora argentina (UTC-3).
-seed = json.load(open(sys.argv[1]))
-ids.setdefault("feriados", [])
-existentes = call("resource.calendar.leaves", "search_read", domain=[["resource_id", "=", False], ["date_from", ">=", "2026-01-01 00:00:00"]],
-                  fields=["date_from", "company_id"], context=CTX)
-ya = {f["date_from"][:10] for f in existentes}
+# 4. Feriados: Odoo les pone siempre una compañía (la activa), así que se crean una vez por compañía,
+#    cada vez con esa compañía como activa. Día completo en hora argentina (UTC-3).
 import datetime as dt
-nuevos = []
-for f in seed["config"]["feriados"]:
-    d = dt.date.fromisoformat(f["fecha"])
-    if d.isoformat() in ya: continue
-    nuevos.append({"name": f["nombre"], "company_id": False, "calendar_id": False, "resource_id": False, "time_type": "leave",
-                   "date_from": f"{d.isoformat()} 03:00:00", "date_to": f"{(d + dt.timedelta(days=1)).isoformat()} 02:59:59"})
-if nuevos:
-    ids["feriados"] += call("resource.calendar.leaves", "create", vals_list=nuevos, context=CTX)
+seed = json.load(open(sys.argv[1]))
+for cia, clave in ((1, "feriados"), (2, "feriados_araza")):
+    ids.setdefault(clave, [])
+    ya = {f["date_from"][:10] for f in call("resource.calendar.leaves", "search_read",
+          domain=[["resource_id", "=", False], ["company_id", "=", cia], ["date_from", ">=", "2026-01-01 00:00:00"]],
+          fields=["date_from"], context={"allowed_company_ids": [cia]})}
+    nuevos = []
+    for f in seed["config"]["feriados"]:
+        d = dt.date.fromisoformat(f["fecha"])
+        if d.isoformat() in ya: continue
+        nuevos.append({"name": f["nombre"], "company_id": cia, "calendar_id": False, "resource_id": False, "time_type": "leave",
+                       "date_from": f"{d.isoformat()} 03:00:00", "date_to": f"{(d + dt.timedelta(days=1)).isoformat()} 02:59:59"})
+    if nuevos:
+        ids[clave] += call("resource.calendar.leaves", "create", vals_list=nuevos, context={"allowed_company_ids": [cia]})
 json.dump(ids, open(LOG, "w"), indent=1, ensure_ascii=False)
-print(json.dumps({k: (v if k != "feriados" else len(v)) for k, v in ids.items()}, ensure_ascii=False, indent=1))
+print(json.dumps({k: (len(v) if k in ("feriados", "feriados_araza") else v) for k, v in ids.items()}, ensure_ascii=False, indent=1))

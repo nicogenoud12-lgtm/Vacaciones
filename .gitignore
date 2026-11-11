@@ -1,3 +1,4 @@
 node_modules/
 *.xlsx
 seed.json
+odoo/*.local.json

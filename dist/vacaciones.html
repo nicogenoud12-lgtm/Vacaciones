@@ -563,6 +563,8 @@ function loadScript(url) {
 function slug(s) {
   return String(s).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 50);
 }
+/** Activo: sin fecha de baja, o con una baja que todavía no llegó. */
+function esActivo(e) { return e.baja ? e.baja > C.hoyISO() : e.activo !== false; }
 function fmtHab(n) { return (Math.round(n * 10) / 10).toString(); }
 
 // ---------- datos derivados ----------
@@ -706,7 +708,7 @@ function empleadosFiltrados() {
   const emp = $('#f-empresa').value, sec = $('#f-sector').value, est = $('#f-estado').value;
   const anio = S.selAnio || cfg().periodoActivo;
   return Array.from(S.emps.values()).filter((e) => {
-    const activo = e.activo !== false;
+    const activo = esActivo(e);
     if (est === 'baja' ? activo : est !== 'todos' && !activo) return false;
     if (emp && e.empresa !== emp) return false;
     if (sec && e.sector !== sec) return false;
@@ -721,7 +723,7 @@ function empleadosFiltrados() {
 
 function renderEmpleados() {
   const anio = S.selAnio || cfg().periodoActivo;
-  const activos = Array.from(S.emps.values()).filter((e) => e.activo !== false);
+  const activos = Array.from(S.emps.values()).filter(esActivo);
   let pend = 0, nAnt = 0, nRev = 0;
   for (const e of activos) {
     const r = filaPeriodo(e, anio);
@@ -749,7 +751,7 @@ function renderEmpleados() {
     if (e.empresa && Object.keys(cfg().empresas || {}).length > 1) chips.push(`<span class="chip">${esc(e.empresa)}</span>`);
     if (!e.ingreso) chips.push('<span class="chip attn">completar ingreso</span>');
     else if (e.revisar) chips.push('<span class="chip attn">revisar saldo</span>');
-    if (e.activo === false) chips.push('<span class="chip neg">baja</span>');
+    if (!esActivo(e)) chips.push('<span class="chip neg">baja</span>');
     if (r && r.tipo === 'proporcional') chips.push('<span class="chip acc">proporcional</span>');
     const corr = r ? (r.tipo === 'proporcional' ? `${r.derecho} háb` : `${r.derechoCorridos} <span class="muted">(${r.derecho} háb)</span>`) : '—';
     return `<tr class="click" data-act="abrir" data-id="${esc(e.id)}" tabindex="0">
@@ -829,10 +831,10 @@ function renderFicha() {
           <label class="field"><span>Sector</span><select id="e-sector">${['Planta', 'Administración'].map((k) => `<option${k === e.sector ? ' selected' : ''}>${k}</option>`).join('')}</select></label>
           <label class="field"><span>Convenio</span><select id="e-convenio">${['Madera', 'Comercio', 'Fuera de convenio'].map((k) => `<option${k === e.convenio ? ' selected' : ''}>${k}</option>`).join('')}</select></label>
           <label class="field"><span>Fecha de baja</span><input type="date" id="e-baja" value="${esc(e.baja || '')}"></label>
-          <label class="field"><span>Saldo inicial: período</span><input type="number" id="e-ini-anio" value="${esc(e.inicio && e.inicio.anio || (f.nuevo ? '' : anioInicio(e)))}" placeholder="Año de ingreso"></label>
+          <label class="field"><span>Saldo inicial: período</span><input type="number" id="e-ini-anio" value="${esc(e.inicio && e.inicio.anio || (f.nuevo ? '' : anioInicio(e)))}" placeholder="${esc(cfg().periodoActivo)}"></label>
           <label class="field"><span>Saldo inicial: hábiles que arrastra</span><input type="number" id="e-ini-arr" step="1" value="${esc(e.inicio ? e.inicio.arrastre : 0)}"></label>
         </div>
-        ${e.inicio && e.inicio.origen ? `<p class="muted" style="font-size:13px;margin:8px 0 0">Origen del saldo inicial: ${esc(e.inicio.origen)}. Positivo = días pendientes del año anterior; negativo = anticipo.</p>` : '<p class="muted" style="font-size:13px;margin:8px 0 0">Saldo inicial: positivo = días pendientes del año anterior; negativo = anticipo.</p>'}
+        ${e.inicio && e.inicio.origen ? `<p class="muted" style="font-size:13px;margin:8px 0 0">Origen del saldo inicial: ${esc(e.inicio.origen)}. Positivo = días pendientes del año anterior; negativo = anticipo.</p>` : '<p class="muted" style="font-size:13px;margin:8px 0 0">La app cuenta las vacaciones desde el período del saldo inicial (si lo dejás vacío, desde el período activo). Hábiles que arrastra: positivo = días pendientes de años anteriores; negativo = anticipo.</p>'}
         <label class="row" style="margin-top:8px"><input type="checkbox" id="e-revisar" ${e.revisar ? 'checked' : ''}> Marcar para revisar</label>
         <div class="row w" style="margin-top:10px">
           <button class="btn primary" data-act="guardar-emp">${f.nuevo ? 'Crear empleado' : 'Guardar datos'}</button>
@@ -930,7 +932,7 @@ function renderPlan() {
   const sem = C.semanas(desde, hasta).slice(0, 60);
   const fer = feriados();
   const emp = $('#p-empresa').value, sec = $('#p-sector').value;
-  const list = Array.from(S.emps.values()).filter((e) => e.activo !== false && (!emp || e.empresa === emp) && (!sec || e.sector === sec)).sort(cmpNombre);
+  const list = Array.from(S.emps.values()).filter((e) => esActivo(e) && (!emp || e.empresa === emp) && (!sec || e.sector === sec)).sort(cmpNombre);
   S.planList = list.map((e) => e.id);
   const wrap = $('#plan-wrap');
   if (!list.length) { wrap.innerHTML = '<div class="empty">No hay empleados para mostrar.</div>'; renderBulkPreview(); return; }
@@ -1047,6 +1049,7 @@ const ACT = {
     const e = S.emps.get(S.ficha.id); const v = leerMovForm();
     const r = C.contarRango(v.desde, v.hasta, feriados().set, cfg().feriadosDescuentan);
     if (!r) { toast('Revisá las fechas.'); return; }
+    if (!r.habiles) { toast('Esas fechas no descuentan ningún día hábil (son fin de semana o feriado).'); return; }
     el.disabled = true;
     try {
       const prev = S.ficha.edit ? movsEmp(e.id).find((m) => m.id === S.ficha.edit) : null;
@@ -1092,10 +1095,12 @@ const ACT = {
     if (!nombre) { toast('Escribí el apellido y nombre.'); return; }
     const ingreso = $('#e-ingreso').value || null;
     const old = f.nuevo ? {} : S.emps.get(f.id);
-    const iniAnio = +$('#e-ini-anio').value || (ingreso ? +ingreso.slice(0, 4) : cfg().periodoActivo);
+    // Sin año indicado: arranca en el período activo (o en el año de ingreso si es posterior), con el arrastre que se cargue.
+    // Arrancar en el año de ingreso le acumularía todos los años anteriores como si nunca hubiera tomado vacaciones.
+    const iniAnio = +$('#e-ini-anio').value || Math.max(ingreso ? +ingreso.slice(0, 4) : 0, cfg().periodoActivo);
     const data = Object.assign({}, old, {
       nombre, ingreso, empresa: $('#e-empresa').value, sector: $('#e-sector').value, convenio: $('#e-convenio').value,
-      baja: $('#e-baja').value || null, activo: !$('#e-baja').value, revisar: $('#e-revisar').checked,
+      baja: $('#e-baja').value || null, activo: !$('#e-baja').value || $('#e-baja').value > C.hoyISO(), revisar: $('#e-revisar').checked,
       inicio: Object.assign({}, old.inicio || {}, { anio: iniAnio, arrastre: Number($('#e-ini-arr').value) || 0 }),
     });
     delete data.id;
@@ -1125,6 +1130,7 @@ const ACT = {
     const d = $('#b-desde').value, h = $('#b-hasta').value, anio = +$('#b-anio').value, estado = $('#b-estado').value;
     const r = C.contarRango(d, h, feriados().set, cfg().feriadosDescuentan);
     if (!r) { toast('Revisá las fechas.'); return; }
+    if (!r.habiles) { toast('Esas fechas no descuentan ningún día hábil (son fin de semana o feriado).'); return; }
     const ids = Array.from(S.bulkSel).filter((id) => S.emps.has(id) && !superpuestos(id, d, h, null).length);
     if (!ids.length) { toast('Marcá al menos un empleado sin vacaciones en esas fechas.'); return; }
     el.disabled = true; let ok = 0;
@@ -1219,7 +1225,7 @@ async function exportarExcel() {
   const saldos = [['Empleado', 'Empresa', 'Sector', 'Convenio', 'Ingreso', 'Antigüedad', 'Corresponde (corridos)', 'Corresponde (hábiles)', 'Arrastre (háb)', 'Ajustes (háb)', 'Tomados (háb)', 'Planificados (háb)', 'Saldo (háb)', 'Saldo (corridos)', 'Estado']];
   for (const e of emps) {
     const r = filaPeriodo(e, anio);
-    saldos.push([e.nombre, e.empresa || '', e.sector || '', e.convenio || '', e.ingreso ? fecha(e.ingreso) : '', r ? r.antig : '', r ? r.derechoCorridos : '', r ? r.derecho : '', r ? r.arrastre : '', r ? r.ajustes : '', r ? r.tomado : '', r ? r.planificado : '', r ? r.saldo : '', r ? r.saldoCorridos : '', e.activo === false ? 'Baja' : 'Activo']);
+    saldos.push([e.nombre, e.empresa || '', e.sector || '', e.convenio || '', e.ingreso ? fecha(e.ingreso) : '', r ? r.antig : '', r ? r.derechoCorridos : '', r ? r.derecho : '', r ? r.arrastre : '', r ? r.ajustes : '', r ? r.tomado : '', r ? r.planificado : '', r ? r.saldo : '', r ? r.saldoCorridos : '', esActivo(e) ? 'Activo' : 'Baja']);
   }
   const movs = [['Empleado', 'Período', 'Tipo', 'Desde', 'Hasta', 'Corridos', 'Hábiles', 'Estado', 'Notificado', 'Observación']];
   for (const [y, list] of Object.entries(S.movs)) for (const m of list) {

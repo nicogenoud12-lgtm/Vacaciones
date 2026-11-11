@@ -18,11 +18,11 @@ def upsert(model, domain, vals):
     return call(model, "create", vals_list=[vals])[0]
 
 
-# 1. Fecha de ingreso en la ficha del empleado (pestaña Configuración de RRHH / datos de empleo)
+# 1. Fecha de ingreso en la ficha del empleado (pestaña Trabajo, arriba del departamento)
 ids["vista_ficha_empleado"] = upsert("ir.ui.view", [["key", "=", "genoud.hr_employee_fecha_ingreso"]], {
     "name": "hr.employee.form · fecha de ingreso (vacaciones)", "key": "genoud.hr_employee_fecha_ingreso",
     "model": "hr.employee", "type": "form", "inherit_id": 3156, "mode": "extension",
-    "arch": """<xpath expr="(//field[@name='employee_type'])[1]" position="before">
+    "arch": """<xpath expr="(//page[@name='work_information']//field[@name='department_id'])[1]" position="before">
   <field name="x_fecha_ingreso"/>
 </xpath>""",
 })
@@ -56,7 +56,8 @@ for emp in records:
         continue
     if ing > fin:
         continue
-    if env['hr.leave.allocation'].search_count([('employee_id', '=', emp.id), ('holiday_status_id', '=', tipo.id), ('name', '=', nombre)]):
+    # Odoo renombra la asignacion ("Vacaciones (14.0 day(s))") si se editan los dias: se busca tambien por fecha de inicio
+    if env['hr.leave.allocation'].search_count([('employee_id', '=', emp.id), ('holiday_status_id', '=', tipo.id), '|', ('name', '=', nombre), '&', ('date_from', '=', ini), ('name', '=like', 'Vacaciones%')]):
         avisos.append(emp.name + ': ya tenia ' + nombre)
         continue
     dias = 0
