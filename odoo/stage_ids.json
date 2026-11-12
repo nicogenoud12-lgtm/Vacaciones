@@ -113,5 +113,31 @@
  "vista_resumen_vacaciones": 4944,
  "campo_x_periodo_txt": 29270,
  "campo_x_dias_finde": 29272,
- "campo_x_dias_feriado": 29274
+ "campo_x_dias_feriado": 29274,
+ "reutilizados": [
+  4,
+  9,
+  10,
+  12,
+  15,
+  19,
+  20,
+  25,
+  26,
+  29,
+  32,
+  37,
+  38,
+  39,
+  40,
+  41,
+  42,
+  43,
+  44,
+  45,
+  47,
+  48,
+  148,
+  151
+ ]
 }
