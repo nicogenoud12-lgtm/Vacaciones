@@ -118,7 +118,19 @@
   32,
   37,
   38,
-  39
+  39,
+  40,
+  41,
+  42,
+  43,
+  44,
+  45,
+  47,
+  49,
+  77,
+  80,
+  84,
+  98
  ],
  "vista_ficha_empleado": 4791,
  "accion_generar_vacaciones": 1426,
@@ -155,6 +167,48 @@
     "name": false
    },
    "nuevo": 7
+  },
+  {
+   "original": {
+    "id": 6,
+    "employee_id": [
+     20,
+     "Daniel Langoni"
+    ],
+    "request_date_from": "2027-07-19",
+    "request_date_to": "2027-07-25",
+    "number_of_days": 5.0,
+    "state": "confirm",
+    "name": false
+   },
+   "nuevo": 8
   }
- ]
+ ],
+ "cambio_empresa_a_araza": [
+  {
+   "id": 77,
+   "empresa_anterior": 1
+  },
+  {
+   "id": 39,
+   "empresa_anterior": 2
+  },
+  {
+   "id": 80,
+   "empresa_anterior": 1
+  },
+  {
+   "id": 84,
+   "empresa_anterior": 1
+  },
+  {
+   "id": 38,
+   "empresa_anterior": 2
+  },
+  {
+   "id": 98,
+   "empresa_anterior": 1
+  }
+ ],
+ "ajuste_wasskiewich_fausto": 129
 }

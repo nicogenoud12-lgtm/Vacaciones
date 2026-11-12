@@ -63,3 +63,13 @@ Desplegado con los mismos scripts (`ODOO_ENV=prod`). IDs en `prod_ids.json`; map
   no tiene fecha de ingreso. Cuando se le cargue y se corra la acción, volver a correr `paso3b` lo pasa y archiva el tipo anterior.
   Primer intento (fallido) dejó el pedido de Langoni restaurado con ID 6 (antes 4), mismas fechas y estado.
 - `deshacer.py` nunca borra fichas reutilizadas, el tipo preexistente ni pedidos/asignaciones anteriores a `inicio_despliegue`.
+
+### Arazá (12/11/2026, planilla `AZ-VACACIONES_2025.xlsx`, hoja 2026)
+
+- `python3 -I tools/importar_excel.py AZ-VACACIONES_2025.xlsx --anio 2026 --empresa AZ` → 52 personas (se omiten las filas sin
+  "VAC 2026": Caliva y Lira). El área de la columna A define el sector (ADMIN = Administración/Comercio; el resto Planta/Madera).
+- 19 ya tenían ficha (6 cargadas desde la planilla GFI + 7 fichas propias de Arazá + Freggiaro, asociado a mano); 33 nuevas.
+- **Gómez Uriel, Jaén, Lupi y Rueda José Luis** estaban en las dos planillas: se pasaron a Arazá (`cambio_empresa_a_araza`).
+- Días verificados contra la planilla: 52/52. Única diferencia con la ley: **Wasskiewich, Fausto Luciano** (ingreso 02/08/2026):
+  la planilla le da 14 corridos; por art. 153 serían 5 hábiles → se cargó un ajuste de +5 para igualar la planilla.
+- El pedido de Langoni pasó al tipo nuevo y "Vacaciones (anterior)" quedó archivado.

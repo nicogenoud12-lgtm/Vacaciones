@@ -105,6 +105,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("xlsx")
     ap.add_argument("--anio", type=int, default=2026)
+    ap.add_argument("--empresa", default="GFI", help="Sigla de la empresa de la planilla (GFI o AZ)")
     args = ap.parse_args()
 
     wb = openpyxl.load_workbook(args.xlsx, data_only=True)
@@ -120,6 +121,8 @@ def main():
                 cols["ingreso"] = c
             elif k == "APELLIDO Y NOMBRE":
                 cols["nombre"] = c
+            elif k.startswith("VAC") and "vac" not in cols:
+                cols["vac"] = c
             elif k.startswith("PENDIENTE"):
                 cols["pend"] = c
             elif k.startswith("ANTICIP") and "$" not in v and "antic" not in cols:
@@ -136,6 +139,9 @@ def main():
             if nombre is None and r > 10 and all(ws.cell(r + i, cols["nombre"]).value is None for i in range(1, 3)):
                 break  # fin de la tabla principal (abajo hay listas auxiliares)
             continue
+        if "vac" in cols and ws.cell(r, cols["vac"]).value in (None, ""):
+            continue  # sin días del año en la planilla: baja o fuera de la lista (ej. Caliva, Lira en Arazá)
+        area = str(ws.cell(r, 1).value or "").strip().upper()
         pend = ws.cell(r, cols["pend"]).value or 0
         antic = ws.cell(r, cols["antic"]).value or 0
         pend = pend if isinstance(pend, (int, float)) else 0
@@ -151,9 +157,10 @@ def main():
             "id": slug(nombre),
             "nombre": titulo(nombre),
             "ingreso": ingreso.strftime("%Y-%m-%d"),
-            "empresa": "GFI",
-            "sector": "Planta",
-            "convenio": "Madera",
+            "empresa": args.empresa,
+            "sector": "Administración" if area == "ADMIN" else "Planta",
+            "convenio": "Comercio" if area == "ADMIN" else "Madera",
+            "area": area or None,
             "activo": True,
             "baja": None,
             "inicio": {
@@ -164,7 +171,7 @@ def main():
             "revisar": bool(notas),
         }
 
-    # Personal administrativo (GFI / AZ)
+    # Personal administrativo (GFI / AZ) — solo en la planilla de GFI
     if "VAC ADMIN 25" in wb.sheetnames:
         wa = wb["VAC ADMIN 25"]
         for r in range(7, wa.max_row + 1):
