@@ -84,3 +84,10 @@ Desplegado con los mismos scripts (`ODOO_ENV=prod`). IDs en `prod_ids.json`; map
 Odoo crea una ficha de empleado **por compañía** para cada usuario (por eso "Adrian" aparece en Genoud y en Arazá). Las vacaciones
 se cargan en **una sola**: la de la empresa empleadora. La otra queda vacía y no aparece en *Saldo de vacaciones*; no se borra
 porque Odoo la usa cuando ese usuario trabaja con la otra empresa seleccionada.
+
+## Feriados en el calendario anual (12/11/2026): no se puede solo con estilos
+
+Se probó en stage marcar los feriados con un círculo gris (CSS vía `ir.asset`). No sirve: en v19 el calendario anual de
+Vacaciones no le pone ninguna clase a los feriados (solo los lista a la derecha) y `hr.leave.get_unusual_days` devuelve todo
+en falso (ni siquiera marca fines de semana), así que `o_calendar_disabled` nunca aparece. Se borró el asset y el adjunto.
+Alternativa posible: cargar los feriados también como **Días obligatorios** (sí se pintan, con color de texto) — ver chat.
