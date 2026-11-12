@@ -50,9 +50,16 @@ Los IDs de lo creado quedan en `stage_ids.json`. El mapa empleado → ID queda e
 
 ## Producción (12/11/2026)
 
-- Hecho: campo `x_fecha_ingreso`, 7 etiquetas, 35 feriados por compañía (Genoud y Arazá). IDs en `prod_ids.json`.
-- **Bloqueado:** producción ya tenía un tipo "Vacaciones" (ID 74, sin asignaciones) con 2 pedidos reales. Odoo no deja
-  activarle "requiere asignación" a un tipo con pedidos. Hay que crear un tipo nuevo (`paso3b_migrar_tipo_existente.py`
-  renombra el viejo a "Vacaciones (anterior)") y pasar los 2 pedidos al nuevo, quitando los originales — falta la decisión del usuario.
-- `prod_mapeo.local.json` (no se sube): 13 personas que ya tenían ficha en Odoo y se reutilizan en lugar de crear otra.
+Desplegado con los mismos scripts (`ODOO_ENV=prod`). IDs en `prod_ids.json`; mapas con nombres en `prod_*.local.json` (no se suben).
+
+- 71 empleados: **13 reutilizan su ficha existente** (los que ya tenían usuario o ficha: Nicolás, Langoni, Adrian, Graciela,
+  Mauricio, Maxi, Bernardo, Sebastián, Ángeles, Ariel, Cristian, González Gustavo y Pacheco Santiago — estos dos en Arazá) y 58 nuevas.
+- 61 asignaciones "Vacaciones 2026" + 16 "Saldo inicial 2025 (Excel)" + 5 anticipos descontados. Verificado: 61/61 iguales a la app.
+- 35 feriados por compañía. Campos, acción, nota PDF (probada), Saldo de vacaciones y resumen por empleado.
+- **Tipo de ausencia:** producción ya tenía un "Vacaciones" (ID 74) sin asignaciones y con 2 pedidos; Odoo no deja cambiarlo.
+  Se renombró **"Vacaciones (anterior)"** y se creó el **"Vacaciones" nuevo (ID 75)** con `paso3b_migrar_tipo_existente.py`
+  (autorizado por el usuario). El pedido de Nicolás (30/11–8/12, aprobado, 5 háb) pasó al tipo nuevo.
+  El de **Langoni (19–25/7/2027, por aprobar) sigue en "Vacaciones (anterior)"**: el tipo nuevo exige días asignados y Langoni
+  no tiene fecha de ingreso. Cuando se le cargue y se corra la acción, volver a correr `paso3b` lo pasa y archiva el tipo anterior.
+  Primer intento (fallido) dejó el pedido de Langoni restaurado con ID 6 (antes 4), mismas fechas y estado.
 - `deshacer.py` nunca borra fichas reutilizadas, el tipo preexistente ni pedidos/asignaciones anteriores a `inicio_despliegue`.

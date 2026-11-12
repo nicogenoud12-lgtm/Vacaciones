@@ -83,5 +83,78 @@
   4070,
   4071,
   4072
+ ],
+ "tipo_anterior": 74,
+ "tipo_vacaciones": 75,
+ "pedidos_restaurados": [
+  {
+   "original": {
+    "id": 4,
+    "employee_id": [
+     20,
+     "Daniel Langoni"
+    ],
+    "request_date_from": "2027-07-19",
+    "request_date_to": "2027-07-25",
+    "number_of_days": 5.0,
+    "state": "confirm",
+    "name": false
+   },
+   "nuevo": null,
+   "restaurado_en_tipo_anterior": 6,
+   "nota": "12/11: falló la creación en el tipo nuevo (sin asignación) y se restauró el original como ID 6"
+  }
+ ],
+ "reutilizados": [
+  9,
+  10,
+  12,
+  15,
+  19,
+  20,
+  25,
+  26,
+  29,
+  32,
+  37,
+  38,
+  39
+ ],
+ "vista_ficha_empleado": 4791,
+ "accion_generar_vacaciones": 1426,
+ "campo_x_dias_corridos": 28645,
+ "campo_x_retoma": 28647,
+ "paperformat_vacaciones": 25,
+ "vista_nota_vacaciones": 4792,
+ "reporte_nota_vacaciones": 1427,
+ "campo_x_vac_asignado": 28649,
+ "campo_x_vac_tomado": 28651,
+ "campo_x_vac_saldo": 28653,
+ "campo_x_vac_saldo_corridos": 28655,
+ "vista_saldo_vacaciones": 4793,
+ "accion_saldo_vacaciones": 1428,
+ "menu_saldo_vacaciones": 710,
+ "campo_x_vac_asignaciones_ids": 28657,
+ "campo_x_vac_ausencias_ids": 28659,
+ "campo_x_periodo": 28661,
+ "campo_x_saldo_despues": 28663,
+ "campo_x_saldo_despues_corr": 28665,
+ "vista_resumen_vacaciones": 4794,
+ "pedidos_migrados": [
+  {
+   "original": {
+    "id": 1,
+    "employee_id": [
+     29,
+     "Nicolas Genoud"
+    ],
+    "request_date_from": "2026-11-30",
+    "request_date_to": "2026-12-08",
+    "number_of_days": 5.0,
+    "state": "validate",
+    "name": false
+   },
+   "nuevo": 7
+  }
  ]
 }
