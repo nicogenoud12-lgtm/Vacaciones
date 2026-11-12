@@ -113,7 +113,7 @@ ids["vista_resumen_vacaciones"] = upsert("ir.ui.view", [["key", "=", "genoud.hr_
     <separator string="Cómo se las tomó"/>
     <field name="x_vac_ausencias_ids" readonly="1" nolabel="1">
       <list default_order="request_date_from, id">
-        <field name="x_periodo" string="Período"/>
+        <field name="x_periodo" string="Período" options="{'format': false}"/>
         <field name="request_date_from" string="Desde"/>
         <field name="request_date_to" string="Hasta"/>
         <field name="x_dias_corridos" string="Corridos" sum="Total"/>
@@ -126,6 +126,7 @@ ids["vista_resumen_vacaciones"] = upsert("ir.ui.view", [["key", "=", "genoud.hr_
       </list>
     </field>
   </sheet>
+  <chatter/>
 </form>""",
 })
 
