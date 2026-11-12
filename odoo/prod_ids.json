@@ -217,5 +217,8 @@
   "id": 111,
   "nombre": "Bonet, Martin Ariel",
   "motivo": "la persona ya tenía la ficha 'Martin' (4)"
- }
+ },
+ "campo_x_periodo_txt": 28667,
+ "campo_x_dias_finde": 28669,
+ "campo_x_dias_feriado": 28671
 }

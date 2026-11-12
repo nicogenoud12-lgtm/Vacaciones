@@ -110,5 +110,8 @@
  "campo_x_periodo": 29264,
  "campo_x_saldo_despues": 29266,
  "campo_x_saldo_despues_corr": 29268,
- "vista_resumen_vacaciones": 4944
+ "vista_resumen_vacaciones": 4944,
+ "campo_x_periodo_txt": 29270,
+ "campo_x_dias_finde": 29272,
+ "campo_x_dias_feriado": 29274
 }

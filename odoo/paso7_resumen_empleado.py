@@ -82,6 +82,51 @@ ids["campo_x_saldo_despues_corr"] = campo(M_LEAVE, "hr.leave", "x_saldo_despues_
         rec['x_saldo_despues_corr'] = -((u - t) + 2 * ((u - t) // 5))"""},
 })
 
+# 2b. Desglose de cada pedido: días de fin de semana y feriados (lunes a viernes) dentro del rango; período como texto
+ids["campo_x_periodo_txt"] = campo(M_LEAVE, "hr.leave", "x_periodo_txt", {
+    "ttype": "char", "field_description": "Período (texto)", "store": False, "readonly": True, "depends": "request_date_from",
+    "compute": """
+for rec in self:
+    d = rec.request_date_from
+    rec['x_periodo_txt'] = str(d.year if d.month >= 10 else d.year - 1) if d else ''
+""",
+})
+ids["campo_x_dias_finde"] = campo(M_LEAVE, "hr.leave", "x_dias_finde", {
+    "ttype": "integer", "field_description": "Días de fin de semana", "store": False, "readonly": True,
+    "depends": "request_date_from,request_date_to",
+    "compute": """
+for rec in self:
+    n = 0
+    if rec.request_date_from and rec.request_date_to:
+        d = rec.request_date_from
+        while d <= rec.request_date_to:
+            if d.weekday() >= 5:
+                n = n + 1
+            d = d + datetime.timedelta(days=1)
+    rec['x_dias_finde'] = n
+""",
+})
+ids["campo_x_dias_feriado"] = campo(M_LEAVE, "hr.leave", "x_dias_feriado", {
+    "ttype": "integer", "field_description": "Feriados (lunes a viernes)", "store": False, "readonly": True,
+    "depends": "request_date_from,request_date_to,employee_id",
+    "compute": """
+for rec in self:
+    n = 0
+    if rec.request_date_from and rec.request_date_to and rec.employee_id:
+        cia = rec.employee_id.company_id.id
+        d = rec.request_date_from
+        while d <= rec.request_date_to:
+            if d.weekday() < 5:
+                mediodia = datetime.datetime(d.year, d.month, d.day, 15, 0, 0)
+                if self.env['resource.calendar.leaves'].sudo().search_count([
+                        ('resource_id', '=', False), ('company_id', 'in', [cia, False]),
+                        ('date_from', '<=', mediodia), ('date_to', '>=', mediodia)]):
+                    n = n + 1
+            d = d + datetime.timedelta(days=1)
+    rec['x_dias_feriado'] = n
+""",
+})
+
 # 3. Formulario de resumen (solo para la acción "Saldo de vacaciones")
 ids["vista_resumen_vacaciones"] = upsert("ir.ui.view", [["key", "=", "genoud.hr_employee_resumen_vacaciones"]], {
     "name": "hr.employee.form · resumen de vacaciones", "key": "genoud.hr_employee_resumen_vacaciones",
@@ -113,11 +158,13 @@ ids["vista_resumen_vacaciones"] = upsert("ir.ui.view", [["key", "=", "genoud.hr_
     <separator string="Cómo se las tomó"/>
     <field name="x_vac_ausencias_ids" readonly="1" nolabel="1">
       <list default_order="request_date_from, id">
-        <field name="x_periodo" string="Período" options="{'format': false}"/>
+        <field name="x_periodo_txt" string="Período"/>
         <field name="request_date_from" string="Desde"/>
         <field name="request_date_to" string="Hasta"/>
         <field name="x_dias_corridos" string="Corridos" sum="Total"/>
-        <field name="number_of_days" string="Hábiles" sum="Total"/>
+        <field name="number_of_days" string="Hábiles (descuenta)" sum="Total"/>
+        <field name="x_dias_finde" string="Fin de semana" sum="Total"/>
+        <field name="x_dias_feriado" string="Feriados" sum="Total"/>
         <field name="x_retoma" string="Retomó"/>
         <field name="state" string="Estado" widget="badge" decoration-success="state == 'validate'" decoration-warning="state in ('confirm', 'validate1')"/>
         <field name="x_saldo_despues" string="Le quedaron (háb)" decoration-danger="x_saldo_despues &lt; 0"/>
