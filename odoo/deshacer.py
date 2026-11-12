@@ -19,7 +19,7 @@ if emp:
         if r: call(m, "unlink", ids=r, context=CTX)
     borrar = [e for e in emp if e not in reutilizados]
     if borrar: call("hr.employee", "unlink", ids=borrar, context=CTX)
-for k, m in [("vista_resumen_vacaciones", "ir.ui.view"), ("campo_x_periodo_txt", "ir.model.fields"), ("campo_x_dias_finde", "ir.model.fields"), ("campo_x_dias_feriado", "ir.model.fields"), ("campo_x_saldo_despues_corr", "ir.model.fields"), ("campo_x_saldo_despues", "ir.model.fields"),
+for k, m in [("vista_resumen_vacaciones", "ir.ui.view"), ("campo_x_periodo_txt", "ir.model.fields"), ("campo_x_finde_cobrado", "ir.model.fields"), ("campo_x_dias_finde", "ir.model.fields"), ("campo_x_dias_feriado", "ir.model.fields"), ("campo_x_saldo_despues_corr", "ir.model.fields"), ("campo_x_saldo_despues", "ir.model.fields"),
              ("campo_x_periodo", "ir.model.fields"), ("campo_x_vac_ausencias_ids", "ir.model.fields"), ("campo_x_vac_asignaciones_ids", "ir.model.fields"),
              ("menu_saldo_vacaciones", "ir.ui.menu"), ("accion_saldo_vacaciones", "ir.actions.act_window"), ("vista_saldo_vacaciones", "ir.ui.view"),
              ("campo_x_vac_saldo_corridos", "ir.model.fields"), ("campo_x_vac_saldo", "ir.model.fields"), ("campo_x_vac_tomado", "ir.model.fields"), ("campo_x_vac_asignado", "ir.model.fields"),

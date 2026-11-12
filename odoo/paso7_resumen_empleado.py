@@ -127,6 +127,24 @@ for rec in self:
 """,
 })
 
+ids["campo_x_finde_cobrado"] = campo(M_LEAVE, "hr.leave", "x_finde_cobrado", {
+    "ttype": "integer", "field_description": "Fin de semana cobrado (días)", "store": False, "readonly": True, "depends": "",
+    # días de fin de semana que se cobran con este pedido = corridos que baja el saldo − hábiles del pedido
+    # (cada vez que se completan 5 hábiles se cobran 2 días de fin de semana)
+    "compute": CALCULO % {"campo": "x_finde_cobrado", "final": """    t = int(round(total))
+    antes = int(round(usado - rec.number_of_days))
+    ahora = int(round(usado))
+    if antes <= t:
+        c_antes = (t + 2 * (t // 5)) - (antes + 2 * (antes // 5))
+    else:
+        c_antes = -((antes - t) + 2 * ((antes - t) // 5))
+    if ahora <= t:
+        c_ahora = (t + 2 * (t // 5)) - (ahora + 2 * (ahora // 5))
+    else:
+        c_ahora = -((ahora - t) + 2 * ((ahora - t) // 5))
+    rec['x_finde_cobrado'] = (c_antes - c_ahora) - int(round(rec.number_of_days))"""},
+})
+
 # 3. Formulario de resumen (solo para la acción "Saldo de vacaciones")
 ids["vista_resumen_vacaciones"] = upsert("ir.ui.view", [["key", "=", "genoud.hr_employee_resumen_vacaciones"]], {
     "name": "hr.employee.form · resumen de vacaciones", "key": "genoud.hr_employee_resumen_vacaciones",
@@ -168,6 +186,7 @@ ids["vista_resumen_vacaciones"] = upsert("ir.ui.view", [["key", "=", "genoud.hr_
         <field name="x_retoma" string="Retomó"/>
         <field name="state" string="Estado" widget="badge" decoration-success="state == 'validate'" decoration-warning="state in ('confirm', 'validate1')"/>
         <field name="x_saldo_despues" string="Le quedaron (háb)" widget="integer" decoration-danger="x_saldo_despues &lt; 0"/>
+        <field name="x_finde_cobrado" string="Finde cobrado" sum="Total" decoration-warning="x_finde_cobrado &gt; 0"/>
         <field name="x_saldo_despues_corr" string="Le quedaron (corr.)" decoration-danger="x_saldo_despues_corr &lt; 0"/>
         <field name="name" string="Descripción" optional="show"/>
       </list>
