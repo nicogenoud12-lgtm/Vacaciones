@@ -73,3 +73,12 @@ Desplegado con los mismos scripts (`ODOO_ENV=prod`). IDs en `prod_ids.json`; map
 - Días verificados contra la planilla: 52/52. Única diferencia con la ley: **Wasskiewich, Fausto Luciano** (ingreso 02/08/2026):
   la planilla le da 14 corridos; por art. 153 serían 5 hábiles → se cargó un ajuste de +5 para igualar la planilla.
 - El pedido de Langoni pasó al tipo nuevo y "Vacaciones (anterior)" quedó archivado.
+- Confirmado por el usuario: "Martin" (ficha 4, Arazá) es **Bonet, Martín Ariel** → se le cargaron los datos y se borró la ficha
+  duplicada 111 que se había creado. "Mauricio" (9, Genoud) es **Santinelli** (ya estaba así; falta su fecha de ingreso).
+  **Ariel Lira** (48) sigue trabajando: ingreso 01/10/2003 de la planilla, 25 háb, sin saldo anterior cargado (marcado revisar).
+
+### Usuarios y empleados
+
+Odoo crea una ficha de empleado **por compañía** para cada usuario (por eso "Adrian" aparece en Genoud y en Arazá). Las vacaciones
+se cargan en **una sola**: la de la empresa empleadora. La otra queda vacía y no aparece en *Saldo de vacaciones*; no se borra
+porque Odoo la usa cuando ese usuario trabaja con la otra empresa seleccionada.
