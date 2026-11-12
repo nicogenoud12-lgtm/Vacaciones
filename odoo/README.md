@@ -76,6 +76,8 @@ Desplegado con los mismos scripts (`ODOO_ENV=prod`). IDs en `prod_ids.json`; map
 - Confirmado por el usuario: "Martin" (ficha 4, Arazá) es **Bonet, Martín Ariel** → se le cargaron los datos y se borró la ficha
   duplicada 111 que se había creado. "Mauricio" (9, Genoud) es **Santinelli** (ya estaba así; falta su fecha de ingreso).
   **Ariel Lira** (48) sigue trabajando: ingreso 01/10/2003 de la planilla, 25 háb, sin saldo anterior cargado (marcado revisar).
+  **Caliva, Vicente Oscar** sigue trabajando: ficha nueva en Arazá, ingreso 01/09/2003, 25 háb, marcado revisar.
+- Nombres de las fichas reutilizadas ("Adrian", "Martin"…): se dejan como están, por decisión del usuario.
 
 ### Usuarios y empleados
 
