@@ -60,9 +60,9 @@ ids["vista_saldo_vacaciones"] = upsert("ir.ui.view", [["key", "=", "genoud.hr_em
   <field name="name"/>
   <field name="company_id" optional="show"/>
   <field name="x_fecha_ingreso" optional="show"/>
-  <field name="x_vac_asignado" string="Asignados (háb)"/>
-  <field name="x_vac_tomado" string="Tomados + por aprobar (háb)"/>
-  <field name="x_vac_saldo" string="Saldo (háb)" decoration-danger="x_vac_saldo &lt; 0" decoration-success="x_vac_saldo &gt; 0" decoration-bf="1"/>
+  <field name="x_vac_asignado" string="Asignados (háb)" widget="integer"/>
+  <field name="x_vac_tomado" string="Tomados + por aprobar (háb)" widget="integer"/>
+  <field name="x_vac_saldo" string="Saldo (háb)" widget="integer" decoration-danger="x_vac_saldo &lt; 0" decoration-success="x_vac_saldo &gt; 0" decoration-bf="1"/>
   <field name="x_vac_saldo_corridos" string="Saldo (corridos)" decoration-danger="x_vac_saldo_corridos &lt; 0"/>
   <field name="category_ids" widget="many2many_tags" optional="hide"/>
 </list>""",

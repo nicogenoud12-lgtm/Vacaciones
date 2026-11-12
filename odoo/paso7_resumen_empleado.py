@@ -140,9 +140,9 @@ ids["vista_resumen_vacaciones"] = upsert("ir.ui.view", [["key", "=", "genoud.hr_
         <field name="x_fecha_ingreso" readonly="1"/>
       </group>
       <group string="Hoy">
-        <field name="x_vac_asignado" string="Le corresponden (háb)"/>
-        <field name="x_vac_tomado" string="Tomados + por aprobar (háb)"/>
-        <field name="x_vac_saldo" string="Le quedan (háb)" decoration-danger="x_vac_saldo &lt; 0" decoration-success="x_vac_saldo &gt; 0" decoration-bf="1"/>
+        <field name="x_vac_asignado" string="Le corresponden (háb)" widget="integer"/>
+        <field name="x_vac_tomado" string="Tomados + por aprobar (háb)" widget="integer"/>
+        <field name="x_vac_saldo" string="Le quedan (háb)" widget="integer" decoration-danger="x_vac_saldo &lt; 0" decoration-success="x_vac_saldo &gt; 0" decoration-bf="1"/>
         <field name="x_vac_saldo_corridos" string="Le quedan (corridos)" decoration-danger="x_vac_saldo_corridos &lt; 0" decoration-bf="1"/>
       </group>
     </group>
@@ -151,7 +151,7 @@ ids["vista_resumen_vacaciones"] = upsert("ir.ui.view", [["key", "=", "genoud.hr_
       <list>
         <field name="date_from" string="Desde"/>
         <field name="name" string="Concepto"/>
-        <field name="number_of_days" string="Días (háb)" sum="Total"/>
+        <field name="number_of_days" string="Días (háb)" sum="Total" widget="integer"/>
         <field name="notes" string="Detalle"/>
       </list>
     </field>
@@ -162,12 +162,12 @@ ids["vista_resumen_vacaciones"] = upsert("ir.ui.view", [["key", "=", "genoud.hr_
         <field name="request_date_from" string="Desde"/>
         <field name="request_date_to" string="Hasta"/>
         <field name="x_dias_corridos" string="Corridos" sum="Total"/>
-        <field name="number_of_days" string="Hábiles (descuenta)" sum="Total"/>
+        <field name="number_of_days" string="Hábiles (descuenta)" sum="Total" widget="integer"/>
         <field name="x_dias_finde" string="Fin de semana" sum="Total"/>
         <field name="x_dias_feriado" string="Feriados" sum="Total"/>
         <field name="x_retoma" string="Retomó"/>
         <field name="state" string="Estado" widget="badge" decoration-success="state == 'validate'" decoration-warning="state in ('confirm', 'validate1')"/>
-        <field name="x_saldo_despues" string="Le quedaron (háb)" decoration-danger="x_saldo_despues &lt; 0"/>
+        <field name="x_saldo_despues" string="Le quedaron (háb)" widget="integer" decoration-danger="x_saldo_despues &lt; 0"/>
         <field name="x_saldo_despues_corr" string="Le quedaron (corr.)" decoration-danger="x_saldo_despues_corr &lt; 0"/>
         <field name="name" string="Descripción" optional="show"/>
       </list>
