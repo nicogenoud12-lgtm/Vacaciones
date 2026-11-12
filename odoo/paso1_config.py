@@ -1,10 +1,13 @@
-"""Paso 1 (stage): campo Fecha de ingreso, etiquetas y feriados.
-Idempotente: si algo ya existe, lo reutiliza. Registra los IDs en odoo/stage_ids.json."""
+"""Paso 1 (stage / prod: ODOO_ENV): campo Fecha de ingreso, etiquetas y feriados.
+Idempotente: si algo ya existe, lo reutiliza. Registra los IDs en odoo/<entorno>_ids.json."""
 import json, os, sys
 sys.path.insert(0, os.path.dirname(__file__))
-from o import call, HOST
-assert "genoud-stage" in HOST, "Este script es solo para stage"
-LOG = os.path.join(os.path.dirname(__file__), "stage_ids.json")
+from o import call, HOST, ENV
+print(">>> ESTAS EN:", HOST)
+
+def _modelo(nombre):
+    return call("ir.model", "search", domain=[["model", "=", nombre]], limit=1)[0]
+LOG = os.path.join(os.path.dirname(__file__), ENV + "_ids.json")
 ids = json.load(open(LOG)) if os.path.exists(LOG) else {}
 CTX = {"allowed_company_ids": [1, 2]}
 
@@ -16,7 +19,7 @@ def uno(model, domain):
 fid = uno("ir.model.fields", [["model", "=", "hr.employee"], ["name", "=", "x_fecha_ingreso"]])
 if not fid:
     fid = call("ir.model.fields", "create", vals_list=[{
-        "model_id": 947, "model": "hr.employee", "name": "x_fecha_ingreso", "ttype": "date", "state": "manual",
+        "model_id": _modelo("hr.employee"), "model": "hr.employee", "name": "x_fecha_ingreso", "ttype": "date", "state": "manual",
         "field_description": "Fecha de ingreso (antigüedad)",
         "help": "Fecha desde la que se cuenta la antigüedad para las vacaciones (LCT art. 150).",
     }])[0]

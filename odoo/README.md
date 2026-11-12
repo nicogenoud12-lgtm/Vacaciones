@@ -1,9 +1,9 @@
-# Vacaciones en Odoo (stage)
+# Vacaciones en Odoo (stage y producción)
 
 Scripts para armar en `genoud-stage.odoo.com` lo mismo que hace la app: Empleados + Ausencias de Odoo,
 contando en días hábiles (14/21/28/35 corridos = 10/15/20/25 hábiles), sin descontar feriados.
 
-Usan la API JSON-2 de Odoo 19 (`o.py`). La clave API la inyecta el proxy del entorno de Claude; no está en el código.
+Usan la API JSON-2 de Odoo 19 (`o.py`). Entorno con la variable `ODOO_ENV` (`stage` por defecto, `prod` para producción); cada script imprime `>>> ESTAS EN:` al arrancar. La clave API la inyecta el proxy del entorno de Claude; no está en el código.
 Los IDs de lo creado quedan en `stage_ids.json`. El mapa empleado → ID queda en `stage_empleados.local.json`, que **no se sube** (tiene nombres de empleados); `paso2_empleados.py` lo reconstruye.
 
 | Paso | Script | Permiso necesario | Estado |
@@ -17,7 +17,7 @@ Los IDs de lo creado quedan en `stage_ids.json`. El mapa empleado → ID queda e
 | 6 | `paso6_saldo_real.py` — menú **Vacaciones → Reportes → Saldo de vacaciones**: saldo real por empleado en hábiles y corridos, con anticipos en rojo | Administrador | Hecho |
 | 7 | `paso7_resumen_empleado.py` — al tocar una fila de *Saldo de vacaciones* se abre el **Resumen de vacaciones**: saldo de hoy, días que le corresponden con su detalle, y cada pedido con su período y lo que le quedó después | Administrador | Hecho |
 
-`deshacer_stage.py` borra todo lo anterior (no correr sin confirmarlo).
+`deshacer.py` borra todo lo anterior (no correr sin confirmarlo).
 
 ## Cómo se usa en Odoo
 
@@ -47,3 +47,12 @@ Los IDs de lo creado quedan en `stage_ids.json`. El mapa empleado → ID queda e
 - **Una asignación o ausencia aprobada no se puede borrar**: primero `action_refuse`, después `unlink`.
 - Verificado después de las correcciones: 61/61 saldos iguales a la app; feriado salteado para un empleado de Arazá
   (24 al 28/12 descuenta 2); volver a correr los pasos 1, 2, 5 y la acción no crea nada nuevo.
+
+## Producción (12/11/2026)
+
+- Hecho: campo `x_fecha_ingreso`, 7 etiquetas, 35 feriados por compañía (Genoud y Arazá). IDs en `prod_ids.json`.
+- **Bloqueado:** producción ya tenía un tipo "Vacaciones" (ID 74, sin asignaciones) con 2 pedidos reales. Odoo no deja
+  activarle "requiere asignación" a un tipo con pedidos. Hay que crear un tipo nuevo (`paso3b_migrar_tipo_existente.py`
+  renombra el viejo a "Vacaciones (anterior)") y pasar los 2 pedidos al nuevo, quitando los originales — falta la decisión del usuario.
+- `prod_mapeo.local.json` (no se sube): 13 personas que ya tenían ficha en Odoo y se reutilizan en lugar de crear otra.
+- `deshacer.py` nunca borra fichas reutilizadas, el tipo preexistente ni pedidos/asignaciones anteriores a `inicio_despliegue`.

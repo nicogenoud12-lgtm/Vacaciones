@@ -1,4 +1,4 @@
-"""Paso 7 (stage): "Resumen de vacaciones" por empleado, al tocar una fila de Vacaciones → Reportes → Saldo de vacaciones.
+"""Paso 7 (stage / prod: ODOO_ENV): "Resumen de vacaciones" por empleado, al tocar una fila de Vacaciones → Reportes → Saldo de vacaciones.
 Muestra el saldo actual, los días que le correspondieron (asignaciones) y cada pedido con el saldo que le quedó después.
 
 Período de un pedido: octubre a diciembre = período del año; enero a septiembre = período del año anterior
@@ -6,11 +6,14 @@ Período de un pedido: octubre a diciembre = período del año; enero a septiemb
 "Le quedaban" después de un pedido = asignaciones de ese período y anteriores − pedidos acumulados hasta ese."""
 import json, os, sys
 sys.path.insert(0, os.path.dirname(__file__))
-from o import call, HOST
-assert "genoud-stage" in HOST
-LOG = os.path.join(os.path.dirname(__file__), "stage_ids.json")
+from o import call, HOST, ENV
+print(">>> ESTAS EN:", HOST)
+
+def _modelo(nombre):
+    return call("ir.model", "search", domain=[["model", "=", nombre]], limit=1)[0]
+LOG = os.path.join(os.path.dirname(__file__), ENV + "_ids.json")
 ids = json.load(open(LOG))
-M_EMP, M_LEAVE = 947, 1352
+M_EMP, M_LEAVE = _modelo("hr.employee"), _modelo("hr.leave")
 
 
 def upsert(model, domain, vals):

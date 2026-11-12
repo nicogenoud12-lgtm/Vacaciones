@@ -1,13 +1,16 @@
-"""Paso 4 (stage): fecha de ingreso visible en la ficha, acción "Generar vacaciones del período",
+"""Paso 4 (stage / prod: ODOO_ENV): fecha de ingreso visible en la ficha, acción "Generar vacaciones del período",
 campos calculados en la ausencia (días corridos y retoma) y la nota de notificación en PDF.
 Solo necesita permisos de administrador del sistema. Idempotente (actualiza si ya existe)."""
 import json, os, sys
 sys.path.insert(0, os.path.dirname(__file__))
-from o import call, HOST
-assert "genoud-stage" in HOST, "Este script es solo para stage"
-LOG = os.path.join(os.path.dirname(__file__), "stage_ids.json")
+from o import call, HOST, ENV
+print(">>> ESTAS EN:", HOST)
+
+def _modelo(nombre):
+    return call("ir.model", "search", domain=[["model", "=", nombre]], limit=1)[0]
+LOG = os.path.join(os.path.dirname(__file__), ENV + "_ids.json")
 ids = json.load(open(LOG))
-M_EMP, M_LEAVE = 947, 1352
+M_EMP, M_LEAVE = _modelo("hr.employee"), _modelo("hr.leave")
 
 
 def upsert(model, domain, vals):
@@ -21,7 +24,7 @@ def upsert(model, domain, vals):
 # 1. Fecha de ingreso en la ficha del empleado (pestaña Trabajo, arriba del departamento)
 ids["vista_ficha_empleado"] = upsert("ir.ui.view", [["key", "=", "genoud.hr_employee_fecha_ingreso"]], {
     "name": "hr.employee.form · fecha de ingreso (vacaciones)", "key": "genoud.hr_employee_fecha_ingreso",
-    "model": "hr.employee", "type": "form", "inherit_id": 3156, "mode": "extension",
+    "model": "hr.employee", "type": "form", "inherit_id": call("ir.ui.view", "search", domain=[["model", "=", "hr.employee"], ["type", "=", "form"], ["inherit_id", "=", False], ["mode", "=", "primary"]], order="priority, id", limit=1)[0], "mode": "extension",
     "arch": """<xpath expr="(//page[@name='work_information']//field[@name='department_id'])[1]" position="before">
   <field name="x_fecha_ingreso"/>
 </xpath>""",

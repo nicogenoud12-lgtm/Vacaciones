@@ -1,6 +1,8 @@
-"""Cliente mínimo de la API JSON-2 de Odoo 19 para genoud-stage (la clave la inyecta el proxy)."""
-import json, sys, urllib.request, urllib.error
-HOST = "https://genoud-stage.odoo.com"
+"""Cliente mínimo de la API JSON-2 de Odoo 19 (la clave la inyecta el proxy del entorno).
+Entorno: variable ODOO_ENV = "stage" (por defecto) o "prod"."""
+import json, os, sys, urllib.request, urllib.error
+ENV = os.environ.get("ODOO_ENV", "stage")
+HOST = {"stage": "https://genoud-stage.odoo.com", "prod": "https://genoud.odoo.com"}[ENV]
 DB = None
 def call(model, method, **kw):
     h = {"Content-Type": "application/json", "Authorization": "bearer proxy-injected"}

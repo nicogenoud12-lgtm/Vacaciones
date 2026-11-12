@@ -1,13 +1,13 @@
-"""Paso 5 (stage): saldo inicial del Excel. Pendiente (+) = asignación "Saldo inicial 2025 (Excel)";
+"""Paso 5 (stage / prod: ODOO_ENV): saldo inicial del Excel. Pendiente (+) = asignación "Saldo inicial 2025 (Excel)";
 anticipo (-) = se descuenta de "Vacaciones 2026". Idempotente. Uso: python3 paso5_saldo_inicial.py seed.json"""
 import json, os, sys
 sys.path.insert(0, os.path.dirname(__file__))
-from o import call, HOST
-assert "genoud-stage" in HOST
-LOG = os.path.join(os.path.dirname(__file__), "stage_ids.json")
+from o import call, HOST, ENV
+print(">>> ESTAS EN:", HOST)
+LOG = os.path.join(os.path.dirname(__file__), ENV + "_ids.json")
 ids = json.load(open(LOG)); CTX = {"allowed_company_ids": [1, 2]}
 seed = json.load(open(sys.argv[1])); T = ids["tipo_vacaciones"]
-EMP = json.load(open(os.path.join(os.path.dirname(__file__), "stage_empleados.local.json")))
+EMP = json.load(open(os.path.join(os.path.dirname(__file__), ENV + "_empleados.local.json")))
 hechos = []
 for e in seed["empleados"]:
     arr = e["inicio"]["arrastre"]; oid = EMP[e["id"]]

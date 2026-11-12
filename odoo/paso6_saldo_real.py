@@ -1,13 +1,16 @@
-"""Paso 6 (stage): vista "Saldo de vacaciones" con el saldo real por empleado (incluye anticipos/negativos).
+"""Paso 6 (stage / prod: ODOO_ENV): vista "Saldo de vacaciones" con el saldo real por empleado (incluye anticipos/negativos).
 El reporte Balance de Odoo nunca muestra negativos: calcula "Restante" por asignación y lo deja en 0.
 Agrega campos calculados (no almacenados) en hr.employee, una lista, una acción y un menú en Vacaciones → Reportes."""
 import json, os, sys
 sys.path.insert(0, os.path.dirname(__file__))
-from o import call, HOST
-assert "genoud-stage" in HOST
-LOG = os.path.join(os.path.dirname(__file__), "stage_ids.json")
+from o import call, HOST, ENV
+print(">>> ESTAS EN:", HOST)
+
+def _modelo(nombre):
+    return call("ir.model", "search", domain=[["model", "=", nombre]], limit=1)[0]
+LOG = os.path.join(os.path.dirname(__file__), ENV + "_ids.json")
 ids = json.load(open(LOG))
-M_EMP = 947
+M_EMP = _modelo("hr.employee")
 
 def upsert(model, domain, vals):
     r = call(model, "search", domain=domain, limit=1, context={"active_test": False})
